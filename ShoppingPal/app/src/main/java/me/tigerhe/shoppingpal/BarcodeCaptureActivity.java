@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.android.gms.samples.vision.barcodereader;
+package me.tigerhe.shoppingpal;
+
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -39,6 +40,9 @@ import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.samples.vision.barcodereader.BarcodeGraphic;
+import com.google.android.gms.samples.vision.barcodereader.BarcodeGraphicTracker;
+import com.google.android.gms.samples.vision.barcodereader.BarcodeTrackerFactory;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.CommonStatusCodes;
