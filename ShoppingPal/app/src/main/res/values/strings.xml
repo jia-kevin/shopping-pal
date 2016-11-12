@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">ShoppingPal</string>
+    <string name="email_prompt">email</string>
+    <string name="password_prompt">password</string>
+    <string name="login_prompt">login</string>
+
+    <string name="items_name">items</string>
 </resources>
