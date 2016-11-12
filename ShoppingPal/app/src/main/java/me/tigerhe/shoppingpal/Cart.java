@@ -6,14 +6,13 @@ import android.support.v7.app.AppCompatActivity;
 
 public class Cart extends AppCompatActivity {
 
-    // OnSwipeTouchListener onSwipeTouchListener;
+    OnSwipeTouchListener onSwipeTouchListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
 
-        /*
         onSwipeTouchListener = new OnSwipeTouchListener(Cart.this) {
             @Override
             public void onSwipeLeft() {
@@ -22,8 +21,7 @@ public class Cart extends AppCompatActivity {
             }
         };
 
-        onSwipeTouchListener.onSwipeLeft();
-        */
+        // onSwipeTouchListener.onSwipeLeft();
 
     }
 

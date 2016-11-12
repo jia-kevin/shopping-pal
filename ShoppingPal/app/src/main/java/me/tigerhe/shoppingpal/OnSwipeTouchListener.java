@@ -1,5 +1,3 @@
-package me.tigerhe.shoppingpal;
-
 import android.content.Context;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
@@ -99,7 +97,6 @@ public class OnSwipeTouchListener implements OnTouchListener {
      * On swipe left.
      */
     public void onSwipeLeft() {
-       // System.exit(0);
     }
 
     /**
