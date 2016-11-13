@@ -13,23 +13,13 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
-        android:ems="10"
-        android:id="@+id/editText"
-        android:hint="@string/email_prompt"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:ems="10"
         android:id="@+id/editText3"
         android:hint="@string/password_prompt"
-        android:layout_below="@+id/editText"
-        android:layout_alignLeft="@+id/editText"
-        android:layout_alignStart="@+id/editText"
+        android:layout_below="@+id/asdf"
+        android:layout_alignLeft="@+id/asdf"
+        android:layout_alignStart="@+id/asdf"
         android:layout_marginTop="24dp" />
 
     <Button
@@ -64,5 +54,4 @@
         android:layout_alignStart="@+id/editText2"
         android:layout_marginTop="27dp"
         android:id="@+id/textView" />
-
 </RelativeLayout>

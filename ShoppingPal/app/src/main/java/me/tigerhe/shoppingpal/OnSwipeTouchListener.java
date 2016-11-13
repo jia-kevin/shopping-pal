@@ -9,6 +9,8 @@ import android.view.View.OnTouchListener;
 
 public class OnSwipeTouchListener implements OnTouchListener {
 
+
+
     private final GestureDetector gestureDetector;
     private Context context;
 
@@ -97,6 +99,7 @@ public class OnSwipeTouchListener implements OnTouchListener {
      * On swipe left.
      */
     public void onSwipeLeft() {
+       // System.exit(0);
     }
 
     /**
