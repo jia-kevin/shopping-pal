@@ -9,25 +9,50 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@color/colorText"
     tools:context="me.tigerhe.shoppingpal.Cart">
 
     <TextView
-        android:text="@string/items_name"
-        android:layout_width="wrap_content"
+        android:text="@string/cart_title"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/textView2" />
+        android:background="@color/colorPrimaryDark"
+        android:textColor="@color/colorText"
+        android:gravity="start"
+        android:id="@+id/titleView" />
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/textView2"
+    <TextView
+        android:text="@string/cart_count_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/textView" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/camera_button"
+        android:drawableTop="@drawable/camera"
+        android:paddingTop="16dp"
+        android:background="@color/colorSecondaryDark"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="23dp"
-        android:id="@+id/list"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:id="@+id/list"
+        android:layout_marginTop="28dp"
+        android:layout_below="@+id/titleView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
 </RelativeLayout>

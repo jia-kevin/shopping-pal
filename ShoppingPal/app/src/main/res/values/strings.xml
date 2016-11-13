@@ -5,7 +5,9 @@
     <string name="password_prompt">password</string>
     <string name="login_prompt">login</string>
 
-    <string name="items_name">items</string>
+    <string name="cart_title">Cart</string>
+    <string name="cart_count_price">$0.00 : 0 items</string>
+
     <string name="ok">OK</string>
     <string name="permission_camera_rationale">Access to the camera is needed for detection</string>
     <string name="no_camera_permission">This application cannot run because it does not have the camera permission.  The application will now exit.</string>

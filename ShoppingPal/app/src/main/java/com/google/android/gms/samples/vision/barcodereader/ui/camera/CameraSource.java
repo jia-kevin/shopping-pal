@@ -133,8 +133,8 @@ public class CameraSource {
     // These values may be requested by the caller.  Due to hardware limitations, we may need to
     // select close, but not exactly the same values for these.
     private float mRequestedFps = 30.0f;
-    private int mRequestedPreviewWidth = 1024;
-    private int mRequestedPreviewHeight = 768;
+    private int mRequestedPreviewWidth = 1080;
+    private int mRequestedPreviewHeight = 1920;
 
 
     private String mFocusMode = null;
