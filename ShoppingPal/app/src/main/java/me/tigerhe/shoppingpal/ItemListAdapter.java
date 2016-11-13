@@ -14,10 +14,7 @@ import java.util.List;
 
 public class ItemListAdapter extends ArrayAdapter<String> {
 
-    private HashMap<String, Integer> initialPositionMap;
-
     private List<String> mList;
-    private int checkedCount;
 
     static class ViewHolder {
         public TextView text;
@@ -27,30 +24,10 @@ public class ItemListAdapter extends ArrayAdapter<String> {
     public ItemListAdapter(Context context, List<String> list) {
         super(context, R.layout.item_task, list);
         mList = list;
-        checkedCount = 0;
-        initialPositionMap = new HashMap<>();
     }
 
     public void updateList(List<String> list) {
         mList = list;
-        notifyDataSetChanged();
-    }
-
-    public void addChecked(int position) {
-        mList.add(mList.get(position));
-        mList.remove(position);
-        notifyDataSetChanged();
-    }
-
-    public void removeChecked(int position) {
-        String task = mList.get(position);
-        int initialIndex = initialPositionMap.get(task);
-        for (int i = 0; i < mList.size() - checkedCount; i++) {
-            if (initialPositionMap.get(mList.get(i)) > initialIndex) {
-                mList.add(i, task);
-            }
-        }
-        mList.remove(position + 1);
         notifyDataSetChanged();
     }
 
@@ -72,26 +49,15 @@ public class ItemListAdapter extends ArrayAdapter<String> {
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     final int pos = position;
                     if (b) {
-                        addChecked(pos);
-                        checkedCount++;
                         compoundButton.setChecked(false);
-
-                    } else {
-                        removeChecked(pos);
-                        checkedCount--;
                     }
                 }
             });
-
-            initialPositionMap.put(mList.get(position), position);
 
         }
 
         ViewHolder holder = (ViewHolder) rowView.getTag();
         holder.text.setText(mList.get(position));
-
-//        TextView text = (TextView) view.findViewById(R.id.task_name);
-//        text.setText(mList.get(position));
 
         return rowView;
     }

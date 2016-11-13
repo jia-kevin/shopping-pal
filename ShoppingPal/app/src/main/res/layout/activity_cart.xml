@@ -12,26 +12,27 @@
     android:background="@color/colorText"
     tools:context="me.tigerhe.shoppingpal.Cart">
 
-    <TextView
-        android:text="@string/cart_title"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:background="@color/colorPrimaryDark"
-        android:textColor="@color/colorText"
-        android:gravity="start"
-        android:id="@+id/titleView" />
+        android:orientation="horizontal">
 
-    <TextView
-        android:text="@string/cart_count_price"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:id="@+id/textView" />
+        <TextView
+            android:text="@string/cart_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryDark"
+            android:textColor="@color/colorText"
+            android:gravity="start"
+            android:id="@+id/titleView" />
+
+        <TextView
+            android:text="@string/cart_count_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView" />
+    </LinearLayout>
+
 
     <Button
         android:layout_width="wrap_content"
@@ -51,8 +52,29 @@
         android:layout_height="100dp"
         android:id="@+id/list"
         android:layout_marginTop="28dp"
-        android:layout_below="@+id/titleView"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:background="@color/colorPrimary"/>
+
+    <Button
+        android:text="Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/camera_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="46dp"
+        android:id="@+id/add_item" />
+
+    <TextView
+        android:text="@color/colorSecondaryDark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/add_item"
+        android:layout_alignLeft="@+id/add_item"
+        android:layout_alignStart="@+id/add_item"
+        android:layout_marginLeft="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginBottom="13dp"
+        android:id="@+id/textView2" />
 
 </RelativeLayout>

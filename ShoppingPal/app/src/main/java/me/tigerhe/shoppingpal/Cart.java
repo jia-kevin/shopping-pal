@@ -18,6 +18,9 @@ public class Cart extends AppCompatActivity {
 
     private Button mSwitchToCameraButton;
 
+    //***
+    private Button addItem;
+
     // list of product names
     private List<String> mProductList;
 
@@ -40,7 +43,19 @@ public class Cart extends AppCompatActivity {
             }
         });
 
+        //***
+        addItem = (Button) findViewById(R.id.add_item);
+        addItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                    mProductList.add("wowza");
+                    mAdapter.updateList(mProductList);
+            }
+        });
+
+
         mProductList = new ArrayList<>();
+
         //**************** temp ************
         mProductList.add("wow");
 
@@ -70,14 +85,4 @@ public class Cart extends AppCompatActivity {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
-
-/*
-    public void sendMessage() {
-        Intent intent = new Intent(this, DisplayMessageActivity.class);
-        EditText editText = (EditText) findViewById(R.id.input_task);
-        String message = editText.getText().toString();
-        intent.putExtra(EXTRA_MESSAGE, message);
-        startActivity(intent);
-    }
-    */
 }
