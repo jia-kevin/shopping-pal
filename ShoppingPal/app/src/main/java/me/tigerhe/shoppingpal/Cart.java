@@ -61,6 +61,7 @@ public class Cart extends AppCompatActivity {
 
         mList = (ListView) findViewById(R.id.list);
         mAdapter = new ItemListAdapter(this, mProductList);
+        mList.setAdapter(mAdapter);
 
     }
 
