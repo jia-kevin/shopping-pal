@@ -9,7 +9,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
-import java.util.HashMap;
 import java.util.List;
 
 public class ItemListAdapter extends ArrayAdapter<Product> {
@@ -57,7 +56,7 @@ public class ItemListAdapter extends ArrayAdapter<Product> {
         }
 
         ViewHolder holder = (ViewHolder) rowView.getTag();
-        holder.text.setText(mList.get(position));
+        //holder.text.setText(mList.get(position));
 
         return rowView;
     }

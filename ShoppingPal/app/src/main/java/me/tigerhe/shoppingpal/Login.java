@@ -98,7 +98,7 @@ public class Login extends AppCompatActivity {
                 // called when response HTTP status is "200 OK"
                 Log.d("Success", "asdf");
                 String searchResult = new String(response);
-                AmazonProduct cannon = new AmazonProduct(searchResult);
+                AmazonProduct.setXml(searchResult);
             }
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
