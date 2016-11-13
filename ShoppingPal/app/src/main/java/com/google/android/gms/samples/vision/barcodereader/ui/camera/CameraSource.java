@@ -853,14 +853,21 @@ public class CameraSource {
         // closest aspect ratio vs. using the closest pixel area.
         SizePair selectedPair = null;
         int minDiff = Integer.MAX_VALUE;
+        int maxW = 0;
         for (SizePair sizePair : validPreviewSizes) {
             Size size = sizePair.previewSize();
-            int diff = Math.abs(size.getWidth() - desiredWidth) +
-                    Math.abs(size.getHeight() - desiredHeight);
-            if (diff < minDiff) {
+            if (size.getWidth()>maxW) {
                 selectedPair = sizePair;
-                minDiff = diff;
+                maxW = size.getWidth();
             }
+            /*
+            if ((size.getHeight() - desiredHeight)>=0 && (size.getWidth() - desiredWidth)>=0) {
+                int diff = Math.abs(size.getHeight() - desiredHeight);
+                if (diff < minDiff) {//&&(size.getWidth() - desiredWidth)>=0) {
+                    selectedPair = sizePair;
+                    minDiff = diff;
+                }
+            }*/
         }
 
         return selectedPair;
