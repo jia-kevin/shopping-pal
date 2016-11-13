@@ -29,7 +29,7 @@ public class Cart extends AppCompatActivity {
     private Button addItem;
 
     // list of product names
-    private List<String> mProductList;
+    private List<Product> mProductList = new ArrayList<>();
 
     // list view and adapter for data
     private ListView mList;
@@ -52,19 +52,8 @@ public class Cart extends AppCompatActivity {
 
         //***
         addItem = (Button) findViewById(R.id.add_item);
-        addItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                    mProductList.add("wowza");
-                    mAdapter.updateList(mProductList);
-            }
-        });
-
-
-        mProductList = new ArrayList<>();
 
         //**************** temp ************
-        mProductList.add("wow");
 
         mList = (ListView) findViewById(R.id.list);
         mAdapter = new ItemListAdapter(this, mProductList);
@@ -73,7 +62,6 @@ public class Cart extends AppCompatActivity {
     }
 
     public void switchToCamera() {
-        mProductList.add("wow");
         mAdapter.updateList(mProductList);
         Intent intent = new Intent(this, BarcodeCaptureActivity.class);
         startActivityForResult(intent, RC_BARCODE_CAPTURE);

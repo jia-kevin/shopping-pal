@@ -12,21 +12,21 @@ import android.widget.TextView;
 import java.util.HashMap;
 import java.util.List;
 
-public class ItemListAdapter extends ArrayAdapter<String> {
+public class ItemListAdapter extends ArrayAdapter<Product> {
 
-    private List<String> mList;
+    private List<Product> mList;
 
     static class ViewHolder {
         public TextView text;
         public CheckBox checkBox;
     }
 
-    public ItemListAdapter(Context context, List<String> list) {
+    public ItemListAdapter(Context context, List<Product> list) {
         super(context, R.layout.item_task, list);
         mList = list;
     }
 
-    public void updateList(List<String> list) {
+    public void updateList(List<Product> list) {
         mList = list;
         notifyDataSetChanged();
     }
