@@ -1,18 +1,14 @@
 package com.amazon.advertising.api.sample;
 
+import android.util.Base64;
+
 import java.io.UnsupportedEncodingException;
-
-import java.net.URLDecoder;
 import java.net.URLEncoder;
-
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.SortedMap;
@@ -22,8 +18,6 @@ import java.util.TreeMap;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
-import android.util.Base64;
-
 public class SignedRequestsHelper {
     private static final String UTF8_CHARSET = "UTF-8";
     private static final String HMAC_SHA256_ALGORITHM = "HmacSHA256";
@@ -31,8 +25,8 @@ public class SignedRequestsHelper {
     private static final String REQUEST_METHOD = "GET";
 
     private String endpoint = "webservices.amazon.com"; // must be lowercase
-    private String awsAccessKeyId = "AKIAJNBAMUA3NA37ZNKA";
-    private String awsSecretKey = "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";
+    private String awsAccessKeyId = "";
+    private String awsSecretKey = "";
 
     private SecretKeySpec secretKeySpec = null;
     private Mac mac = null;
@@ -55,6 +49,8 @@ public class SignedRequestsHelper {
     public String sign(Map<String, String> params) {
         params.put("AWSAccessKeyId", awsAccessKeyId);
         params.put("Timestamp", timestamp());
+        params.put("AssociateTag", "kzzhang-20");
+        params.put("Service", "AWSECommerceService");
 
         SortedMap<String, String> sortedParamMap =
                 new TreeMap<String, String>(params);
@@ -68,7 +64,7 @@ public class SignedRequestsHelper {
         String hmac = hmac(toSign);
         String sig = percentEncodeRfc3986(hmac);
         String url = "http://" + endpoint + REQUEST_URI + "?" +
-                canonicalQS + "&Signature=" + sig;
+                canonicalQS + "&Signature=" + sig.replaceAll("%3D%0A","%3D");
 
         return url;
     }

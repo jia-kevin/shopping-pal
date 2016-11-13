@@ -33,18 +33,6 @@
         android:layout_alignLeft="@+id/editText3"
         android:layout_alignStart="@+id/editText3" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:text="Name"
-        android:ems="10"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="35dp"
-        android:id="@+id/editText2"
-        android:layout_alignRight="@+id/editText"
-        android:layout_alignEnd="@+id/editText" />
-
     <TextView
         android:text="TextView"
         android:layout_width="wrap_content"
@@ -54,4 +42,18 @@
         android:layout_alignStart="@+id/editText2"
         android:layout_marginTop="27dp"
         android:id="@+id/textView" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Name"
+        android:ems="10"
+        android:layout_marginTop="134dp"
+        android:id="@+id/editText2"
+        android:layout_below="@+id/button"
+        android:layout_alignRight="@+id/editText3"
+        android:layout_alignEnd="@+id/editText3"
+        android:layout_marginRight="42dp"
+        android:layout_marginEnd="42dp" />
 </RelativeLayout>

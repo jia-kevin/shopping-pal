@@ -1,22 +1,24 @@
 package me.tigerhe.shoppingpal;
 
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-
-import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.amazon.advertising.api.sample.ItemLookupSample;
 import com.amazon.advertising.api.sample.SignedRequestsHelper;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+
+import org.apache.http.Header;
 
 import java.util.HashMap;
-
-import org.w3c.dom.Text;
 
 public class Login extends AppCompatActivity {
 
@@ -35,31 +37,6 @@ public class Login extends AppCompatActivity {
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
-    }
-
-    protected void testQuery(View v) {
-        TextView editTest = (TextView) findViewById(R.id.emailbox);
-
-
-        HashMap<String, String> map = new HashMap<String, String>();
-        map.put("ItemID", "B00008OE6I");
-        map.put("Operation", "ItemLookup");
-
-        AWS4Signer test = new AWS4Signer();
-        test.setRegionName("US");
-        test.setServiceName("AWSECommerceService");
-        BasicAWSCredentials cred = new BasicAWSCredentials(login, keypassword); //fill in with AWS credentials
-
-        AmazonWebServiceRequest amazonWebServiceRequest = new AmazonWebServiceRequest() {
-        };
-
-        Request request = new DefaultRequest(amazonWebServiceRequest, "AWSECommerceService");
-        request.setHttpMethod(HttpMethodName.GET);
-        request.setParameters(map);
-
-        test.sign(request, cred);
-
-        editTest.setText("asdf");
     }
 
     /**
@@ -98,7 +75,7 @@ public class Login extends AppCompatActivity {
         client.disconnect();
     }
     protected void onClick(View v){
-        TextView input = (TextView) findViewById(R.id.editText);
+        TextView input = (TextView) findViewById(R.id.editText3);
         TextView output = (TextView) findViewById(R.id.textView);
 
         HashMap<String, String> map = new HashMap<String, String>();
@@ -107,6 +84,34 @@ public class Login extends AppCompatActivity {
         ItemLookupSample test = new ItemLookupSample();
         SignedRequestsHelper url = new SignedRequestsHelper();
         String txt = input.getText().toString();
-        output.setText(url.sign(map));
+        final String query = url.sign(map);
+        final String testURL = "https://www.google.ca";
+
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        //client.get(url.sign(map), new AsyncHttpResponseHandler() {
+        client.get(query, new AsyncHttpResponseHandler() {
+            @Override
+            public void onStart() {
+                Log.d("[HTTP REQUEST]", query);
+            }
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+                // called when response HTTP status is "200 OK"
+                Log.d("Success", "asdf");
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                // called when response HTTP status is "4XX" (eg. 401, 403, 404)
+                Log.d("Failure", Integer.toString(statusCode) );
+            }
+            @Override
+            public void onRetry() {
+                // called when request is retried
+                Log.d("Retry", "asdf");
+            }
+        });
+
+        //output.setText(test.fetchTitle(query));
     }
 }
