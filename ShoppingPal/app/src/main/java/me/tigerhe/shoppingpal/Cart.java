@@ -28,7 +28,7 @@ public class Cart extends AppCompatActivity {
     private ListView mList;
     private ItemListAdapter mAdapter;
     final int RC_BARCODE_CAPTURE = 9001;
-    int barcodeValue;
+    long barcodeValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +78,7 @@ public class Cart extends AppCompatActivity {
                 if (data != null) {
                     Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
 
-                    //barcodeValue = Integer.parseInt(barcode.displayValue);
+                    barcodeValue = Long.parseLong(barcode.displayValue);
                 }
             }
         }
