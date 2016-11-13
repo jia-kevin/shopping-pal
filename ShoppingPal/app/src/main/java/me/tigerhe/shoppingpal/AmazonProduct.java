@@ -17,7 +17,7 @@ public class AmazonProduct {
     public AmazonProduct(){
     }
 
-    public AmazonProduct(String XmlInput){
+    public static void setXml(String XmlInput){
         int index1, index2;
         //for name
         index1 = XmlInput.indexOf("<Title>")+7;
