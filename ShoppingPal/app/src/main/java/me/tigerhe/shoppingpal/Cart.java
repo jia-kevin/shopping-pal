@@ -12,15 +12,14 @@ import java.util.List;
 
 public class Cart extends AppCompatActivity {
 
-    // OnSwipeTouchListener onSwipeTouchListener;
-
-
     private Button mSwitchToCameraButton;
 
+    // list of product names
+    private List<String> mProductList;
+
+    // list view and adapter for data
     private ListView mList;
     private ItemListAdapter mAdapter;
-
-    private List<String> mProductList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +34,11 @@ public class Cart extends AppCompatActivity {
             }
         });
 
-        mList = (ListView) findViewById(R.id.list);
         mProductList = new ArrayList<>();
+        //**************** temp ************
+        mProductList.add("wow");
+
+        mList = (ListView) findViewById(R.id.list);
         mAdapter = new ItemListAdapter(this, mProductList);
 
     }
