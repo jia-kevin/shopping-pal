@@ -18,7 +18,6 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import org.apache.http.Header;
 
-import java.io.IOException;
 import java.util.HashMap;
 
 public class Login extends AppCompatActivity {
@@ -75,7 +74,7 @@ public class Login extends AppCompatActivity {
         AppIndex.AppIndexApi.end(client, getIndexApiAction());
         client.disconnect();
     }
-    protected void onClick(View v) throws IOException {
+    protected void onClick(View v){
         TextView input = (TextView) findViewById(R.id.editText3);
         TextView output = (TextView) findViewById(R.id.textView);
 
@@ -97,8 +96,6 @@ public class Login extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
                 // called when response HTTP status is "200 OK"
                 Log.d("Success", "asdf");
-                String searchResult = new String(response);
-                AmazonProduct cannon = new AmazonProduct(searchResult);
             }
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
@@ -111,17 +108,7 @@ public class Login extends AppCompatActivity {
                 Log.d("Retry", "asdf");
             }
         });
-/*
-        AsyncHttpClient asyncClient = new AsyncHttpClient()
-        final String fetchURL = "https://www.amazon.com/Canon-PowerShot-Digital-Camera-Optical/dp/tech-data/B00008OE6I%3FSubscriptionId%3DAKIAIJ6PQBW5JNMUZRRQ%26tag%3Dkzzhang-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D386001%26creativeASIN%3DB00008OE6I";
-        final String encoded = Base64.getEncoder().getBytes(StandardCharsets.UTF_8));
-        final String body = asyncClient
-                .prepareGet(fetchURL)
-                .addHeader(HttpHeaders.AUTHORIZATION, "Basic " + encoded)
-                .execute()
-                .get()
-                .getResponseBody(StandardCharsets.UTF_8.name());
-        System.out.println(body);*/
 
+        //output.setText(test.fetchTitle(query));
     }
 }
