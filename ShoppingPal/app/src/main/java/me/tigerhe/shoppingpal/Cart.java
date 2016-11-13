@@ -87,6 +87,7 @@ public class Cart extends AppCompatActivity {
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 if (data != null) {
                     Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
+<<<<<<< HEAD
                     barcodeValue = Long.parseLong(barcode.displayValue);
                     map.put("IdType", "UPC");
                     map.put("ItemId", Long.toString(barcodeValue));
@@ -119,6 +120,10 @@ public class Cart extends AppCompatActivity {
                             Log.d("Retry", "asdf");
                         }
                     });
+=======
+
+                    barcodeValue = Long.parseLong(barcode.displayValue);
+>>>>>>> origin/master
                 }
             }
         }
