@@ -85,11 +85,8 @@ public class Login extends AppCompatActivity {
         SignedRequestsHelper url = new SignedRequestsHelper();
         String txt = input.getText().toString();
         final String query = url.sign(map);
-        final String testURL = "https://www.google.ca";
-
 
         AsyncHttpClient client = new AsyncHttpClient();
-        //client.get(url.sign(map), new AsyncHttpResponseHandler() {
         client.get(query, new AsyncHttpResponseHandler() {
             @Override
             public void onStart() {
