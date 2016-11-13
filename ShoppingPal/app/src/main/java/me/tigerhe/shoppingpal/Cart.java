@@ -14,6 +14,9 @@ public class Cart extends AppCompatActivity {
 
     private Button mSwitchToCameraButton;
 
+    //***
+    private Button addItem;
+
     // list of product names
     private List<String> mProductList;
 
@@ -34,7 +37,19 @@ public class Cart extends AppCompatActivity {
             }
         });
 
+        //***
+        addItem = (Button) findViewById(R.id.add_item);
+        addItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                    mProductList.add("wowza");
+                    mAdapter.updateList(mProductList);
+            }
+        });
+
+
         mProductList = new ArrayList<>();
+
         //**************** temp ************
         mProductList.add("wow");
 
@@ -50,6 +65,10 @@ public class Cart extends AppCompatActivity {
         Intent intent = new Intent(this, BarcodeCaptureActivity.class);
         startActivity(intent);
     }
+
+
+
+
 
 
 }
