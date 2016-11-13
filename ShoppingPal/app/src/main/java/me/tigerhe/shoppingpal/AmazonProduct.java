@@ -5,14 +5,17 @@ package me.tigerhe.shoppingpal;
  */
 
 public class AmazonProduct {
-    String name;
-    Float price;
-    Float rating;
-    String picture;
-    String ASIN;
-    String category;
-    String manufacturer;
-    String url;
+    public static String name;
+    public static Float price;
+    public static Float rating;
+    public static String picture;
+    public static String ASIN;
+    public static String category;
+    public static String manufacturer;
+    public static String url;
+
+    public AmazonProduct(){
+    }
 
     public AmazonProduct(String XmlInput){
         int index1, index2;
@@ -28,11 +31,11 @@ public class AmazonProduct {
         category = XmlInput.substring(index1,index2);
         index1 = XmlInput.indexOf("<Manufacturer>")+14;
         index2 = XmlInput.indexOf("</Manufacturer>");
-        manufacturer = XmlInput.substring(index1,index2);
+        manufacturer = XmlInput.substring(index1,index2);/*
         index1 = XmlInput.indexOf("<URL>")+5;
         index2 = XmlInput.indexOf("</URL>");
         url = XmlInput.substring(index1,index2);
-        /*
+
         //go to main page to find picture url
         AsyncHttpClient client = new AsyncHttpClient();
         picture = client.get(url, new AsyncHttpResponseHandler() {
