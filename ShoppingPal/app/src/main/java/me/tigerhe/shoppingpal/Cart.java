@@ -12,7 +12,7 @@ import java.util.List;
 
 public class Cart extends AppCompatActivity {
 
-    OnSwipeTouchListener onSwipeTouchListener;
+    // OnSwipeTouchListener onSwipeTouchListener;
 
 
     private Button mSwitchToCameraButton;
@@ -38,16 +38,6 @@ public class Cart extends AppCompatActivity {
         mList = (ListView) findViewById(R.id.list);
         mProductList = new ArrayList<>();
         mAdapter = new ItemListAdapter(this, mProductList);
-
-
-
-//        onSwipeTouchListener = new OnSwipeTouchListener(Cart.this) {
-//            @Override
-//            public void onSwipeLeft() {
-//                System.exit(0);
-//                switchToCamera();
-//            }
-//        };
 
     }
 

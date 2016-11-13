@@ -99,6 +99,7 @@ public class OnSwipeTouchListener implements OnTouchListener {
      * On swipe left.
      */
     public void onSwipeLeft() {
+       // System.exit(0);
     }
 
     /**
