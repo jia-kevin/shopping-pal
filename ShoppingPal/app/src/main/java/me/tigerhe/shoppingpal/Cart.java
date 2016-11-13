@@ -7,14 +7,18 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
+import com.google.android.gms.vision.text.Text;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Cart extends AppCompatActivity {
+
+    private TextView mCountPrice;
 
     private Button mSwitchToCameraButton;
 
@@ -34,6 +38,8 @@ public class Cart extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
+
+        mCountPrice = (TextView) findViewById(R.id.count_price);
 
         mSwitchToCameraButton = (Button) findViewById(R.id.camera_button);
         mSwitchToCameraButton.setOnClickListener(new View.OnClickListener() {
@@ -56,9 +62,6 @@ public class Cart extends AppCompatActivity {
 
         mProductList = new ArrayList<>();
 
-        //**************** temp ************
-        mProductList.add("wow");
-
         mList = (ListView) findViewById(R.id.list);
         mAdapter = new ItemListAdapter(this, mProductList);
         mList.setAdapter(mAdapter);
@@ -66,8 +69,6 @@ public class Cart extends AppCompatActivity {
     }
 
     public void switchToCamera() {
-        mProductList.add("wow");
-        mAdapter.updateList(mProductList);
         Intent intent = new Intent(this, BarcodeCaptureActivity.class);
         startActivityForResult(intent, RC_BARCODE_CAPTURE);
     }
@@ -86,4 +87,7 @@ public class Cart extends AppCompatActivity {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
+
+
+
 }
