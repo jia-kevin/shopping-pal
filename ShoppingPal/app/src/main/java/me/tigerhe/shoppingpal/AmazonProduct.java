@@ -7,6 +7,7 @@ package me.tigerhe.shoppingpal;
 public class AmazonProduct {
     public static String name;
     public static Float price;
+    public static Integer amount;
     public static Float rating;
     public static String picture;
     public static String ASIN;
