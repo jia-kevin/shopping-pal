@@ -21,6 +21,7 @@ class ProductSave {
     File target;
     FileOutputStream fout;
     HashMap<String, String> map;
+    AsyncHttpResponseHandler handler;
 
     public ProductSave(File file, HashMap<String, String> input){
         Log.d("initialize", "first");
@@ -85,7 +86,7 @@ class ProductSave {
                 rating = temp.substring(0, index2);
                 AsyncHttpClient newClient = new AsyncHttpClient();
                 //find star rating
-                newClient.get(rating, new AsyncHttpResponseHandler() {
+                newClient.get(rating, handler = new AsyncHttpResponseHandler() {
                     @Override
                     public void onStart() {
                         //Log.d("[HTTP REQUEST]", query);
@@ -103,8 +104,6 @@ class ProductSave {
                         try{
                             fout.write(("Rating of product "+stars).getBytes());
                             fout.write(("\n").getBytes());
-                            Log.d("Closing", "closing file stream");
-                            fout.close();
                         }catch (IOException a){
                             Log.d("Writing IO Exception", a.toString());
                         }
@@ -118,6 +117,16 @@ class ProductSave {
                     public void onRetry() {
                         // called when request is retried
                         Log.d("Retry", "asdf");
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        try{
+                            Log.d("Closing", "closing file stream");
+                            fout.close();
+                        }catch (IOException a){
+                            Log.d("Writing IO Exception", a.toString());
+                        }
                     }
                 });
 
@@ -256,14 +265,44 @@ class ProductSave {
         });
     }
 
-    public void close(){
-        Log.d("end", "fifth");
-
-        Log.d("close", "close");
+    /*
+    public String output(){
+        String output;
+        FileInputStream fin = null;
+        int length = (int) target.length();
+        byte[] bytes = new byte[length];
         try {
-            fout.close();
-        }catch (IOException a){
-            Log.d("Class", a.toString());
+            synchronized (handler) {
+                try {
+                    fin = new FileInputStream(target);
+                    fin.read(bytes);
+                } catch (IOException e) {
+                    Log.d("Reading File", e.toString());
+                } finally {
+                    try {
+                        fin.close();
+                    } catch (IOException e) {
+                        Log.d("Reading File", e.toString());
+                    }
+                }
+                Log.d("Reading", "firstread!");
+            }
+        }catch (NullPointerException a){
+            try {
+                fin = new FileInputStream(target);
+                fin.read(bytes);
+            } catch (IOException e) {
+                Log.d("Reading File", e.toString());
+            } finally {
+                try {
+                    fin.close();
+                } catch (IOException e) {
+                    Log.d("Reading File", e.toString());
+                }
+            }
+            Log.d("Reading", "secondread!");
         }
-    }
+        output = new String(bytes);
+        return output;
+    }*/
 }
