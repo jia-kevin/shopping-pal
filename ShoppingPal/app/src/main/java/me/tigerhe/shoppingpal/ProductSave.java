@@ -9,6 +9,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import org.apache.http.Header;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
@@ -21,7 +22,8 @@ class ProductSave {
     File target;
     FileOutputStream fout;
     HashMap<String, String> map;
-    AsyncHttpResponseHandler handler;
+    //final AsyncHttpResponseHandler handler;
+    String output = "";
 
     public ProductSave(File file, HashMap<String, String> input){
         Log.d("initialize", "first");
@@ -37,7 +39,32 @@ class ProductSave {
         map.put(key, value);
     }
 
-    public void save(){
+    public String save(){
+        Thread thread = new Thread(){
+            @Override
+            public void run(){
+                try {
+                    basicSave();
+                    while(output.isEmpty()) {
+                        Thread.sleep(200);
+                    }
+                }catch (InterruptedException e){
+                    Log.d("Interrupted Sleep", e.toString());
+                }
+            }
+        };
+        thread.start();
+        try {
+            thread.join();
+            return output;
+        }catch (InterruptedException e){
+            Log.d("Interrupted", e.toString());
+        }
+
+        return "error";
+    }
+
+    public void basicSave(){
         Log.d("basic", "second");
         //open file output stream
         try {
@@ -51,6 +78,16 @@ class ProductSave {
         final String input = url.sign(map);
         AsyncHttpClient client = new AsyncHttpClient();
         //get basic details
+
+        map.put("ResponseGroup", "Offers");
+        final String pricequery = url.sign(map);
+        this.savePrice(pricequery);
+
+        map.remove("ResponseGroup");
+        map.put("ResponseGroup", "Images");
+        final String imgurlquery = url.sign(map);
+        this.saveImage(imgurlquery);
+
         client.get(input, new AsyncHttpResponseHandler() {
             @Override
             public void onStart() {
@@ -86,9 +123,10 @@ class ProductSave {
                 rating = temp.substring(0, index2);
                 AsyncHttpClient newClient = new AsyncHttpClient();
                 //find star rating
-                newClient.get(rating, handler = new AsyncHttpResponseHandler() {
+                newClient.get(rating, new AsyncHttpResponseHandler() {
                     @Override
                     public void onStart() {
+                        Log.d("Starting", "second");
                         //Log.d("[HTTP REQUEST]", query);
                     }
                     @Override
@@ -124,6 +162,22 @@ class ProductSave {
                         try{
                             Log.d("Closing", "closing file stream");
                             fout.close();
+                            FileInputStream fin = null;
+                            int length = (int) target.length();
+                            byte[] bytes = new byte[length];
+                            try {
+                                fin = new FileInputStream(target);
+                                fin.read(bytes);
+                            } catch (IOException e) {
+                                Log.d("Reading File", e.toString());
+                            } finally {
+                                try {
+                                    fin.close();
+                                } catch (IOException e) {
+                                    Log.d("Reading File", e.toString());
+                                }
+                            }
+                            output = new String(bytes);
                         }catch (IOException a){
                             Log.d("Writing IO Exception", a.toString());
                         }
@@ -144,6 +198,7 @@ class ProductSave {
                 }catch (IOException a){
                     Log.d("Writing IO exception", a.toString());
                 }
+                Log.d("Done", "First");
             }
 
             @Override
@@ -158,15 +213,7 @@ class ProductSave {
                 Log.d("Retry", "asdf");
             }
         });
-
-        map.put("ResponseGroup", "Offers");
-        final String pricequery = url.sign(map);
-        this.savePrice(pricequery);
-
-        map.remove("ResponseGroup");
-        map.put("ResponseGroup", "Images");
-        final String imgurlquery = url.sign(map);
-        this.saveImage(imgurlquery);
+        Log.d("changing", "output");
     }
 
     public void savePrice(String input){
@@ -195,7 +242,7 @@ class ProductSave {
                 else{
                     index1 = searchResult.indexOf("<LowestNewPrice>");
                     String temp = searchResult.substring(index1);
-                    index1 = temp.indexOf("<Amount>");
+                    index1 = temp.indexOf("<Amount>")+8;
                     index2 = temp.indexOf("</Amount>");
                     amount = temp.substring(index1, index2);
                     index1 = temp.indexOf("<FormattedPrice>$") + 17;
@@ -265,9 +312,10 @@ class ProductSave {
         });
     }
 
-    /*
-    public String output(){
-        String output;
+
+    public String returnSaved(){
+        /*String output;
+
         FileInputStream fin = null;
         int length = (int) target.length();
         byte[] bytes = new byte[length];
@@ -302,7 +350,7 @@ class ProductSave {
             }
             Log.d("Reading", "secondread!");
         }
-        output = new String(bytes);
+        output = new String(bytes);*/
         return output;
-    }*/
+    }
 }
