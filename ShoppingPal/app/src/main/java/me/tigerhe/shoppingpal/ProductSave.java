@@ -140,7 +140,7 @@ class ProductSave {
                         index2 = index1+3;
                         stars = searchResult.substring(index1, index2);
                         try{
-                            fout.write(("Rating of product "+stars).getBytes());
+                            fout.write(("Rating of product: "+stars).getBytes());
                             fout.write(("\n").getBytes());
                         }catch (IOException a){
                             Log.d("Writing IO Exception", a.toString());
@@ -150,6 +150,7 @@ class ProductSave {
                     public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                         // called when response HTTP status is "4XX" (eg. 401, 403, 404)
                         Log.d("Failure", Integer.toString(statusCode));
+                        output = "Failure";
                     }
                     @Override
                     public void onRetry() {
@@ -185,15 +186,15 @@ class ProductSave {
                 });
 
                 try{
-                    fout.write(("Name of product "+name).getBytes());
+                    fout.write(("Name of product: "+name).getBytes());
                     fout.write(("\n").getBytes());
-                    fout.write(("ASIN of product "+ASIN).getBytes());
+                    fout.write(("ASIN of product: "+ASIN).getBytes());
                     fout.write(("\n").getBytes());
-                    fout.write(("Category of product "+category).getBytes());
+                    fout.write(("Category of product: "+category).getBytes());
                     fout.write(("\n").getBytes());
-                    fout.write(("Manufacturer of product "+manufacturer).getBytes());
+                    fout.write(("Manufacturer of product: "+manufacturer).getBytes());
                     fout.write(("\n").getBytes());
-                    fout.write(("Url of product "+producturl).getBytes());
+                    fout.write(("Url of product: "+producturl).getBytes());
                     fout.write(("\n").getBytes());
                 }catch (IOException a){
                     Log.d("Writing IO exception", a.toString());
@@ -205,6 +206,7 @@ class ProductSave {
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 // called when response HTTP status is "4XX" (eg. 401, 403, 404)
                 Log.d("Failure", Integer.toString(statusCode));
+                output = "Failure";
             }
 
             @Override
@@ -213,7 +215,6 @@ class ProductSave {
                 Log.d("Retry", "asdf");
             }
         });
-        Log.d("changing", "output");
     }
 
     public void savePrice(String input){
@@ -251,9 +252,9 @@ class ProductSave {
                 }
 
                 try{
-                    fout.write(("Price of product "+price).getBytes());
+                    fout.write(("Price of product: "+price).getBytes());
                     fout.write(("\n").getBytes());
-                    fout.write(("Amount of product "+amount).getBytes());
+                    fout.write(("Amount of product: "+amount).getBytes());
                     fout.write(("\n").getBytes());
                 }catch (IOException a){
                     Log.d("Writing IO exception", a.toString());
@@ -263,6 +264,7 @@ class ProductSave {
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 // called when response HTTP status is "4XX" (eg. 401, 403, 404)
                 Log.d("Failure", Integer.toString(statusCode));
+                output = "Failure";
             }
             @Override
             public void onRetry() {
@@ -293,7 +295,7 @@ class ProductSave {
                 index2 = temp.indexOf("</URL>");
                 imgurl = temp.substring(0, index2);
                 try{
-                    fout.write(("Imgurl of product "+imgurl).getBytes());
+                    fout.write(("Imgurl of product: "+imgurl).getBytes());
                     fout.write(("\n").getBytes());
                 }catch (IOException a){
                     Log.d("Write to file", a.toString());
@@ -303,6 +305,7 @@ class ProductSave {
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 // called when response HTTP status is "4XX" (eg. 401, 403, 404)
                 Log.d("Failure", Integer.toString(statusCode));
+                output = "Failure";
             }
             @Override
             public void onRetry() {
@@ -310,47 +313,5 @@ class ProductSave {
                 Log.d("Retry", "asdf");
             }
         });
-    }
-
-
-    public String returnSaved(){
-        /*String output;
-
-        FileInputStream fin = null;
-        int length = (int) target.length();
-        byte[] bytes = new byte[length];
-        try {
-            synchronized (handler) {
-                try {
-                    fin = new FileInputStream(target);
-                    fin.read(bytes);
-                } catch (IOException e) {
-                    Log.d("Reading File", e.toString());
-                } finally {
-                    try {
-                        fin.close();
-                    } catch (IOException e) {
-                        Log.d("Reading File", e.toString());
-                    }
-                }
-                Log.d("Reading", "firstread!");
-            }
-        }catch (NullPointerException a){
-            try {
-                fin = new FileInputStream(target);
-                fin.read(bytes);
-            } catch (IOException e) {
-                Log.d("Reading File", e.toString());
-            } finally {
-                try {
-                    fin.close();
-                } catch (IOException e) {
-                    Log.d("Reading File", e.toString());
-                }
-            }
-            Log.d("Reading", "secondread!");
-        }
-        output = new String(bytes);*/
-        return output;
     }
 }
