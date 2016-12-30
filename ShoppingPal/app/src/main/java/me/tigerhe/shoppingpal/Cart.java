@@ -3,6 +3,7 @@ package me.tigerhe.shoppingpal;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -12,7 +13,6 @@ import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,7 +32,6 @@ public class Cart extends AppCompatActivity {
     final int RC_BARCODE_CAPTURE = 9001;
     long barcodeValue;
     File path, current, cartlog;
-    FileOutputStream fout, fin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +67,7 @@ public class Cart extends AppCompatActivity {
         HashMap<String, String> map = new HashMap<String, String>();
         map.put("Operation","ItemLookup");
         ProductSave saver = new ProductSave(current, map);
+        String productData = null;
         if (requestCode == RC_BARCODE_CAPTURE) {
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 if (data != null) {
@@ -78,13 +78,19 @@ public class Cart extends AppCompatActivity {
                     saver.mapAdd("ItemId", Long.toString(barcodeValue));
                     saver.mapAdd("SearchIndex", "All");
 
-                    saver.save();
+                    productData = saver.save();
                 }
             }
         }
         else {
             super.onActivityResult(requestCode, resultCode, data);
         }
+
+        //prints data to work with
+        Log.d("Product Data", productData);
+        AmazonProduct retrieved = new AmazonProduct(productData);
+        if (retrieved.isValid()) retrieved.print();
+        else Log.d("Retrieved", "Invalid!");
     }
 
 }
