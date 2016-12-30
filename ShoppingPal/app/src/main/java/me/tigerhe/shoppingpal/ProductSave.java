@@ -101,12 +101,12 @@ class ProductSave {
                 String name, rating, ASIN, category, manufacturer, producturl;
                 Log.d("Success", "first");
                 String searchResult = new String(response);
-
+                
                 index1 = searchResult.indexOf("<Title>")+7;
                 index2 = searchResult.indexOf("</Title>");
                 name = searchResult.substring(index1,index2);
-                index1 = searchResult.indexOf("<ItemId>")+8;
-                index2 = searchResult.indexOf("</ItemId>");
+                index1 = searchResult.indexOf("<ASIN>")+6;
+                index2 = searchResult.indexOf("</ASIN>");
                 ASIN = searchResult.substring(index1,index2);
                 index1 = searchResult.indexOf("<ProductGroup>")+14;
                 index2 = searchResult.indexOf("</ProductGroup>");
