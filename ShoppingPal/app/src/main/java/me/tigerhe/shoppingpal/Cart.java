@@ -21,7 +21,7 @@ public class Cart extends AppCompatActivity {
 
     private TextView mCountPrice;
 
-    private Button mSwitchToCameraButton;
+    private Button cameraButton;
 
     // list of product names
     private List<Product> mProductList = new ArrayList<>();
@@ -40,8 +40,8 @@ public class Cart extends AppCompatActivity {
 
         mCountPrice = (TextView) findViewById(R.id.count_price);
 
-        mSwitchToCameraButton = (Button) findViewById(R.id.camera_button);
-        mSwitchToCameraButton.setOnClickListener(new View.OnClickListener() {
+        cameraButton = (Button) findViewById(R.id.camera_button);
+        cameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 switchToCamera();
