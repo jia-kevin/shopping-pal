@@ -75,42 +75,43 @@ public class Login extends AppCompatActivity {
         AppIndex.AppIndexApi.end(client, getIndexApiAction());
         client.disconnect();
     }
-    protected void onClick(View v) throws IOException {
-        TextView input = (TextView) findViewById(R.id.editText3);
-        TextView output = (TextView) findViewById(R.id.textView);
 
-        HashMap<String, String> map = new HashMap<String, String>();
-        map.put("ItemId", "B00008OE6I");
-        map.put("Operation","ItemLookup");
-        ItemLookupSample test = new ItemLookupSample();
-        SignedRequestsHelper url = new SignedRequestsHelper();
-        String txt = input.getText().toString();
-        final String query = url.sign(map);
-
-        AsyncHttpClient client = new AsyncHttpClient();
-        client.get(query, new AsyncHttpResponseHandler() {
-            @Override
-            public void onStart() {
-                Log.d("[HTTP REQUEST]", query);
-            }
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
-                // called when response HTTP status is "200 OK"
-                Log.d("Success", "asdf");
-                String searchResult = new String(response);
-                AmazonProduct cannon = new AmazonProduct(searchResult);
-            }
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                // called when response HTTP status is "4XX" (eg. 401, 403, 404)
-                Log.d("Failure", Integer.toString(statusCode) );
-            }
-            @Override
-            public void onRetry() {
-                // called when request is retried
-                Log.d("Retry", "asdf");
-            }
-        });
+//    protected void onClick(View v) throws IOException {
+//        TextView input = (TextView) findViewById(R.id.editText3);
+//        TextView output = (TextView) findViewById(R.id.textView);
+//
+//        HashMap<String, String> map = new HashMap<String, String>();
+//        map.put("ItemId", "B00008OE6I");
+//        map.put("Operation","ItemLookup");
+//        ItemLookupSample test = new ItemLookupSample();
+//        SignedRequestsHelper url = new SignedRequestsHelper();
+//        String txt = input.getText().toString();
+//        final String query = url.sign(map);
+//
+//        AsyncHttpClient client = new AsyncHttpClient();
+//        client.get(query, new AsyncHttpResponseHandler() {
+//            @Override
+//            public void onStart() {
+//                Log.d("[HTTP REQUEST]", query);
+//            }
+//            @Override
+//            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+//                // called when response HTTP status is "200 OK"
+//                Log.d("Success", "asdf");
+//                String searchResult = new String(response);
+//                AmazonProduct cannon = new AmazonProduct(searchResult);
+//            }
+//            @Override
+//            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+//                // called when response HTTP status is "4XX" (eg. 401, 403, 404)
+//                Log.d("Failure", Integer.toString(statusCode) );
+//            }
+//            @Override
+//            public void onRetry() {
+//                // called when request is retried
+//                Log.d("Retry", "asdf");
+//            }
+//        });
 /*
         AsyncHttpClient asyncClient = new AsyncHttpClient()
         final String fetchURL = "https://www.amazon.com/Canon-PowerShot-Digital-Camera-Optical/dp/tech-data/B00008OE6I%3FSubscriptionId%3DAKIAIJ6PQBW5JNMUZRRQ%26tag%3Dkzzhang-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D386001%26creativeASIN%3DB00008OE6I";
@@ -123,5 +124,5 @@ public class Login extends AppCompatActivity {
                 .getResponseBody(StandardCharsets.UTF_8.name());
         System.out.println(body);*/
 
-    }
+//    }
 }
