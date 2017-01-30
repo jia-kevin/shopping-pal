@@ -28,6 +28,14 @@ public class AmazonProduct {
     public AmazonProduct(String XmlInput){
         if (XmlInput.equals("Failure")){
             ASIN = "@@@FAILURE@@@";
+            name = "@@@FAILURE@@@";
+            price = (float)0;
+            amount = 0;
+            rating = (float)0;
+            picture = "@@@FAILURE@@@";
+            category = "@@@FAILURE@@@";
+            manufacturer = "@@@FAILURE@@@";
+            url = "@@@FAILURE@@@";
         }
 
         else {
