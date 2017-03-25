@@ -150,31 +150,22 @@ public class CameraSourcePreview extends ViewGroup {
 
         final int layoutWidth = right - left;
         final int layoutHeight = bottom - top;
+
+        // Computes height and width for potentially doing fit width.
         int childWidth = layoutWidth;
         int childHeight = layoutHeight;
-        int scaledChildWidth = layoutWidth;
-        int scaledChildHeight = layoutHeight;
-        if (layoutWidth * childHeight > layoutHeight * childWidth) {
-            scaledChildWidth = childWidth * height / childHeight;
-        } else {
-            scaledChildHeight = childHeight * width / childWidth;
-        }/*
-        // Computes height and width for potentially doing fit width.
+//        int childHeight = (int)(((float) layoutWidth / (float) width) * height);
 
         // If height is too tall using fit width, does fit height instead.
         if (childHeight > layoutHeight) {
             childHeight = layoutHeight;
             childWidth = (int)(((float) layoutHeight / (float) height) * width);
-        }*/
+        }
 
         for (int i = 0; i < getChildCount(); ++i) {
-            getChildAt(i).layout(0,0, scaledChildWidth, scaledChildHeight);
+            getChildAt(i).layout(0, 0, childWidth, childHeight);
         }
-        /*
-        for (int i = 0; i < getChildCount(); ++i) {
-            getChildAt(i).layout((layoutWidth - scaledChildWidth) / 2, (layoutHeight - scaledChildHeight) / 2, scaledChildWidth, scaledChildHeight);
-        }
-        */
+
         try {
             startIfReady();
         } catch (SecurityException se) {

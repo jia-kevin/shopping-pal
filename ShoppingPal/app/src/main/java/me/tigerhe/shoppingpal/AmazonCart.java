@@ -62,7 +62,7 @@ public class AmazonCart {
                 // called when response HTTP status is "200 OK"
                 Log.d("Success", "create");
                 String searchResult = new String(response);
-                Log.d("Create", searchResult);
+                Log.d("Create Cart", searchResult);
                 int index1, index2;
                 index1 = searchResult.indexOf("<PurchaseURL>")+13;
                 index2 = searchResult.indexOf("</PurchaseURL>");

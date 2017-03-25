@@ -11,21 +11,21 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class ItemListAdapter extends ArrayAdapter<Product> {
+public class ItemListAdapter extends ArrayAdapter<AmazonProduct> {
 
-    private List<Product> mList;
+    private List<AmazonProduct> mList;
 
     static class ViewHolder {
         public TextView text;
         public CheckBox checkBox;
     }
 
-    public ItemListAdapter(Context context, List<Product> list) {
+    public ItemListAdapter(Context context, List<AmazonProduct> list) {
         super(context, R.layout.item_task, list);
         mList = list;
     }
 
-    public void updateList(List<Product> list) {
+    public void updateList(List<AmazonProduct> list) {
         mList = list;
         notifyDataSetChanged();
     }

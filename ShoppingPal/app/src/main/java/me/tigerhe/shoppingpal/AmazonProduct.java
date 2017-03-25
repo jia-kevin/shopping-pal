@@ -90,7 +90,7 @@ public class AmazonProduct {
 
     //returns whether product is successfully populated
     public boolean isValid(){
-        if (ASIN.equals("@@@FAILURE@@@")) return false;
+        if (ASIN.equals("@@@FAILURE@@@") || price == 0) return false;
         else return true;
     }
 
@@ -104,6 +104,20 @@ public class AmazonProduct {
         Log.d("Category", category);
         Log.d("Manufacturer", manufacturer);
         Log.d("URL", url);
+    }
+
+    public String display(){
+        String output = "";
+        output += "Name: " + name + "\n";
+        output += "Price: " + price.toString() + "\n";
+        output += "Amount: " + amount.toString() + "\n";
+        output += "Rating: " + rating.toString() + "\n";
+        output += "ImageURL: " + picture + "\n";
+        output += "ASIN: " + ASIN + "\n";
+        output += "Category: " + category + "\n";
+        output += "Manufacturer: " + manufacturer + "\n";
+        output += "URL: " + url + "\n";
+        return output;
     }
 
     //get functions

@@ -101,6 +101,7 @@ class ProductSave {
                 String name, rating, ASIN, category, manufacturer, producturl;
                 Log.d("Success", "first");
                 String searchResult = new String(response);
+                Log.d("okinput", searchResult);
                 
                 index1 = searchResult.indexOf("<Title>")+7;
                 index2 = searchResult.indexOf("</Title>");
@@ -233,6 +234,7 @@ class ProductSave {
                 String price, amount;
                 Log.d("Success", "third");
                 String searchResult = new String(response);
+                Log.d("faultyinput", searchResult);
                 index1 = searchResult.indexOf("<TotalNew>")+10;
                 index2 = searchResult.indexOf("</TotalNew>");
                 amount = searchResult.substring(index1, index2);

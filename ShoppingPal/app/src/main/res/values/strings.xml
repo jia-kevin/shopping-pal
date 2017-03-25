@@ -6,7 +6,7 @@
     <string name="login_prompt">login</string>
 
     <string name="cart_title">  Cart</string>
-    <string name="cart_count_price">$0.00 : 0 items</string>
+    <!--<string name="cart_count_price">$0.00 : 0 items</string>-->
 
     <string name="ok">OK</string>
     <string name="permission_camera_rationale">Access to the camera is needed for detection</string>

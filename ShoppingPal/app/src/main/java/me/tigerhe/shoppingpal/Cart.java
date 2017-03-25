@@ -1,6 +1,7 @@
 package me.tigerhe.shoppingpal;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -13,6 +14,7 @@ import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
 
 import java.io.File;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,9 +24,12 @@ public class Cart extends AppCompatActivity {
     private TextView mCountPrice;
 
     private Button cameraButton;
+    AmazonCart cart = null;
 
     // list of product names
-    private List<Product> mProductList = new ArrayList<>();
+    private List<AmazonProduct> mProductList = new ArrayList<>();
+    int items = 0;
+    double price = 0;
 
     // list view and adapter for data
     private ListView mList;
@@ -45,6 +50,32 @@ public class Cart extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 switchToCamera();
+            }
+        });
+
+        final Button addButton = (Button) findViewById(R.id.add_item);
+        addButton.setEnabled(false);
+        final Button checkout = (Button) findViewById(R.id.checkout);
+        checkout.setEnabled(false);
+        final TextView quantity = (TextView)findViewById(R.id.quantity);
+        quantity.setText("");
+        quantity.setFocusable(false);
+
+        Button resetButton = (Button) findViewById(R.id.reset);
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                items = 0;
+                price = 0;
+                cart = null;
+                TextView count = (TextView)findViewById(R.id.count_price);
+                count.setText("$0.00 : 0 items");
+                addButton.setEnabled(false);
+                checkout.setEnabled(false);
+                quantity.setText("");
+                quantity.setFocusable(false);
+                TextView output = (TextView)findViewById(R.id.data_output);
+                output.setText("");
             }
         });
 
@@ -88,9 +119,64 @@ public class Cart extends AppCompatActivity {
 
         //prints data to work with
         Log.d("Product Data", productData);
-        AmazonProduct retrieved = new AmazonProduct(productData);
+        final AmazonProduct retrieved = new AmazonProduct(productData);
         if (retrieved.isValid()) retrieved.print();
         else Log.d("Retrieved", "Invalid!");
-    }
+        if (retrieved.isValid()){
+            AmazonCart sample = new AmazonCart(retrieved, 1);
+            Log.d("Checkout URL", sample.checkout);
+        }
 
+        TextView output = (TextView)findViewById(R.id.data_output);
+        if (retrieved.isValid()){
+            output.setText(retrieved.display());
+            Button addButton = (Button) findViewById(R.id.add_item);
+            addButton.setEnabled(true);
+            final TextView quantity = (TextView)findViewById(R.id.quantity);
+            quantity.setFocusableInTouchMode(true);
+            quantity.setFocusable(true);
+
+            addButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String input = quantity.getText().toString();
+                    try{
+                        int number = Integer.parseInt(input);
+                        if (number > 0) {
+                            Button checkout = (Button) findViewById(R.id.checkout);
+                            if (cart == null) {
+                                cart = new AmazonCart(retrieved, number);
+                                checkout.setEnabled(true);
+                            } else {
+                                cart.add(retrieved, number);
+                            }
+                            items += number;
+                            price += number*retrieved.getPrice();
+                            String outputPrice = new DecimalFormat("#.##").format(price);
+                            TextView count = (TextView)findViewById(R.id.count_price);
+                            count.setText("$" + outputPrice + " : "+Integer.toString(items)+" items");
+                            checkout.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Uri uriUrl = Uri.parse(cart.checkout);
+                                    Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+                                    startActivity(launchBrowser);
+                                }
+                            });
+                        }
+                    }catch (NumberFormatException e){
+                        Log.d("Input Error","Input an integer for quantity");
+                    }
+                }
+            });
+        }
+        else{
+            output.setText("Error - Could not find the associated product on Amazon.");
+            Button addButton = (Button) findViewById(R.id.add_item);
+            addButton.setEnabled(false);
+            TextView quantity = (TextView)findViewById(R.id.quantity);
+            quantity.setText("");
+            quantity.setFocusable(false);
+        }
+    }
 }
