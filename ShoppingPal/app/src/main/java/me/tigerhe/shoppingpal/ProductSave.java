@@ -292,7 +292,8 @@ class ProductSave {
                 String imgurl;
                 Log.d("Success", "fourth");
                 String searchResult = new String(response);
-                index1 = searchResult.indexOf("<MediumImage><URL>")+18;
+                //Log.d("IMGOUTPUT", searchResult);
+                index1 = searchResult.indexOf("<LargeImage><URL>")+17;
                 String temp = searchResult.substring(index1);
                 index2 = temp.indexOf("</URL>");
                 imgurl = temp.substring(0, index2);

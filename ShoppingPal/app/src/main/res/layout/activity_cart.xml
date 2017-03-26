@@ -15,14 +15,25 @@
 
     <TextView
         android:id="@+id/titleView"
-        android:layout_width="wrap_content"
-        android:layout_height="42dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
         android:background="@color/colorPrimaryLight"
         android:gravity="start"
-        android:text="@string/cart_title"
-        android:textColor="@color/colorText"
+        android:layout_alignParentTop="true" />
+
+    <TextView
+        android:id="@+id/titleText"
+        android:layout_width="wrap_content"
+        android:layout_height="42dp"
+        android:layout_alignStart="@id/titleView"
+        android:layout_alignLeft="@id/titleView"
+        android:paddingLeft="5dp"
         android:textSize="32sp"
-        android:typeface="serif" />
+        android:typeface="serif"
+        android:gravity="start"
+        android:textColor="@color/colorText"
+        android:layout_alignParentTop="true"
+        android:text="@string/cart_title"/>
 
     <Button
         android:id="@+id/camera_button"
@@ -42,8 +53,9 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="53dp"
         android:layout_marginBottom="62dp"
+        android:paddingTop="20dp"
         android:background="@color/colorPrimary">
     </LinearLayout>
 
@@ -54,38 +66,29 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="100dp"
-        android:layout_marginTop="48dp" />
+        android:layout_marginTop="53dp" />
         <!--android:layout_height="match_parent"-->
 
-
-    <LinearLayout
-        android:id="@+id/data_view"
-        android:autoLink="web"
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+    <TextView
+        android:id="@+id/data_output"
+        android:layout_width="match_parent"
+        android:textColor="@color/colorText"
+        android:layout_marginTop="55dp"
         android:layout_marginBottom="130dp"
-        android:layout_marginTop="48dp" >
-
-        <TextView
-            android:id="@+id/data_output"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        </LinearLayout>
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/camera_button"
+        android:layout_gravity="center_vertical"
+        android:gravity="center"
         android:layout_marginBottom="15dp">
 
         <Space
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_weight="1" >
+            android:layout_weight="1">
         </Space>
 
         <Button
@@ -98,13 +101,12 @@
         <Space
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_weight="1" >
+            android:layout_weight="1">
         </Space>
 
         <EditText
             android:id="@+id/quantity"
             android:layout_width="210px"
-            android:layout_marginTop="2dp"
             android:layout_height="105px"
             android:layout_weight="1"
             android:background="@color/colorField"
@@ -114,7 +116,7 @@
         <Space
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_weight="1" >
+            android:layout_weight="1">
         </Space>
 
         <Button
@@ -127,7 +129,7 @@
         <Space
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_weight="1" >
+            android:layout_weight="1">
         </Space>
 
     </LinearLayout>
@@ -152,28 +154,33 @@
     <TextView
         android:id="@+id/count_price"
         android:layout_width="wrap_content"
-        android:layout_height="42dp"
+        android:layout_height="50dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/titleView"
-        android:layout_toRightOf="@+id/titleView"
+        android:layout_toEndOf="@+id/reset"
+        android:layout_toRightOf="@+id/reset"
+        android:paddingRight="5dp"
         android:background="@color/colorPrimaryLight"
         android:gravity="end"
         android:text="$0.00 : 0 items"
         android:textColor="@color/colorText"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:typeface="serif" />
 
     <Button
         android:id="@+id/reset"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
         android:backgroundTint="#759aff"
         android:text="Reset Cart"
-        android:layout_toRightOf="@+id/titleView"
-        android:layout_marginLeft="17dp"
-        android:layout_marginStart="17dp"
+        android:layout_toRightOf="@+id/titleText"
+        android:layout_marginLeft="19dp"
+        android:layout_marginStart="19dp"
         android:layout_alignBottom="@+id/count_price" />
 
 </RelativeLayout>
+
+    <!--//android:text="@string/cart_title"//-->

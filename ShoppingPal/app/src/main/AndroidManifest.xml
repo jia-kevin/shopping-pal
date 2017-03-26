@@ -32,6 +32,7 @@
 
         <activity
             android:name=".DisplayImageActivity"
+            android:screenOrientation="portrait"
             android:label="Display product">
         </activity>
 

@@ -1,7 +1,6 @@
 package me.tigerhe.shoppingpal;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -14,7 +13,6 @@ import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
 
 import java.io.File;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -112,81 +110,86 @@ public class Cart extends AppCompatActivity {
                     saver.mapAdd("SearchIndex", "All");
 
                     productData = saver.save();
+
+                    //prints data to work with
+                    Log.d("Product Data", productData);
+                    final AmazonProduct retrieved = new AmazonProduct(productData);
+//                    if (retrieved.isValid()) retrieved.print();
+//                    else Log.d("Retrieved", "Invalid!");
+//                    if (retrieved.isValid()){
+//                        AmazonCart sample = new AmazonCart(retrieved, 1);
+//                        Log.d("Checkout URL", sample.checkout);
+//                    }
+
+                    TextView output = (TextView)findViewById(R.id.data_output);
+                    if (retrieved.isValid()){
+                        displayObject(retrieved);
+//                        output.setText(retrieved.display());
+//                        Button addButton = (Button) findViewById(R.id.add_item);
+//                        addButton.setEnabled(true);
+//                        final TextView quantity = (TextView)findViewById(R.id.quantity);
+//                        quantity.setFocusableInTouchMode(true);
+//                        quantity.setFocusable(true);
+//
+//                        addButton.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//                                String input = quantity.getText().toString();
+//                                try{
+//                                    int number = Integer.parseInt(input);
+//                                    if (number > 0 && number <= retrieved.getAmount()) {
+//                                        Button checkout = (Button) findViewById(R.id.checkout);
+//                                        if (cart == null) {
+//                                            cart = new AmazonCart(retrieved, number);
+//                                            checkout.setEnabled(true);
+//                                        } else {
+//                                            cart.add(retrieved, number);
+//                                        }
+//                                        items += number;
+//                                        price += number*retrieved.getPrice();
+//                                        String outputPrice = new DecimalFormat("#.##").format(price);
+//                                        TextView count = (TextView)findViewById(R.id.count_price);
+//                                        count.setText("$" + outputPrice + " : "+Integer.toString(items)+" items");
+//                                        checkout.setOnClickListener(new View.OnClickListener() {
+//                                            @Override
+//                                            public void onClick(View view) {
+//                                                Uri uriUrl = Uri.parse(cart.checkout);
+//                                                Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+//                                                startActivity(launchBrowser);
+//                                            }
+//                                        });
+//                                    }
+//                                }catch (NumberFormatException e){
+//                                    Log.d("Input Error","Input an integer for quantity");
+//                                }
+//                            }
+//                        });
+                    }
+                    else{
+                        output.setText("Error - Could not find the associated product on Amazon.");
+                        Button addButton = (Button) findViewById(R.id.add_item);
+                        addButton.setEnabled(false);
+                        TextView quantity = (TextView)findViewById(R.id.quantity);
+                        quantity.setText("");
+                        quantity.setFocusable(false);
+                    }
                 }
             }
         }
-        else {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
+        else if (requestCode == RC_PRODUCT_DISPLAY){
+            if (resultCode == CommonStatusCodes.SUCCESS) {
+                if (data != null) {
 
-        //prints data to work with
-        Log.d("Product Data", productData);
-        final AmazonProduct retrieved = new AmazonProduct(productData);
-        if (retrieved.isValid()) retrieved.print();
-        else Log.d("Retrieved", "Invalid!");
-        if (retrieved.isValid()){
-            AmazonCart sample = new AmazonCart(retrieved, 1);
-            Log.d("Checkout URL", sample.checkout);
-        }
-
-        TextView output = (TextView)findViewById(R.id.data_output);
-        if (retrieved.isValid()){
-            output.setText(retrieved.display());
-            Button addButton = (Button) findViewById(R.id.add_item);
-            addButton.setEnabled(true);
-            final TextView quantity = (TextView)findViewById(R.id.quantity);
-            quantity.setFocusableInTouchMode(true);
-            quantity.setFocusable(true);
-
-            addButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    String input = quantity.getText().toString();
-                    try{
-                        int number = Integer.parseInt(input);
-                        if (number > 0 && number <= retrieved.getAmount()) {
-                            Button checkout = (Button) findViewById(R.id.checkout);
-                            if (cart == null) {
-                                cart = new AmazonCart(retrieved, number);
-                                checkout.setEnabled(true);
-                            } else {
-                                cart.add(retrieved, number);
-                            }
-                            items += number;
-                            price += number*retrieved.getPrice();
-                            String outputPrice = new DecimalFormat("#.##").format(price);
-                            TextView count = (TextView)findViewById(R.id.count_price);
-                            count.setText("$" + outputPrice + " : "+Integer.toString(items)+" items");
-                            checkout.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    Uri uriUrl = Uri.parse(cart.checkout);
-                                    Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
-                                    startActivity(launchBrowser);
-                                }
-                            });
-                        }
-                    }catch (NumberFormatException e){
-                        Log.d("Input Error","Input an integer for quantity");
-                    }
                 }
-            });
-        }
-        else{
-            output.setText("Error - Could not find the associated product on Amazon.");
-            Button addButton = (Button) findViewById(R.id.add_item);
-            addButton.setEnabled(false);
-            TextView quantity = (TextView)findViewById(R.id.quantity);
-            quantity.setText("");
-            quantity.setFocusable(false);
+            }
         }
     }
 
     public void displayObject(AmazonProduct product) {
         Intent intent = new Intent(this, DisplayImageActivity.class);
-        intent.putExtra("Price", product.getPrice());
-        intent.putExtra("Quantity", product.getAmount());
-        intent.putExtra("Rating", product.getRating());
+        intent.putExtra("Price", product.getPrice().toString());
+        intent.putExtra("Quantity", product.getAmount().toString());
+        intent.putExtra("Rating", product.getRating().toString());
         intent.putExtra("Manufacturer", product.getManufacturer());
         intent.putExtra("Imgurl", product.getPicture());
         intent.putExtra("Url", product.getUrl());
