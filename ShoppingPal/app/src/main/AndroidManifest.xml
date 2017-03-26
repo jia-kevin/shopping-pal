@@ -27,7 +27,13 @@
 
         <activity
             android:name=".BarcodeCaptureActivity"
-            android:label="Read Barcode"></activity>
+            android:label="Read Barcode">
+        </activity>
+
+        <activity
+            android:name=".DisplayImageActivity"
+            android:label="Display product">
+        </activity>
 
         <activity android:name=".Cart"
             android:screenOrientation="portrait"

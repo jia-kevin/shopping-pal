@@ -25,6 +25,7 @@ public class Cart extends AppCompatActivity {
 
     private Button cameraButton;
     AmazonCart cart = null;
+    AmazonProduct currentProduct = null;
 
     // list of product names
     private List<AmazonProduct> mProductList = new ArrayList<>();
@@ -35,6 +36,7 @@ public class Cart extends AppCompatActivity {
     private ListView mList;
     private ItemListAdapter mAdapter;
     final int RC_BARCODE_CAPTURE = 9001;
+    final int RC_PRODUCT_DISPLAY = 9002;
     long barcodeValue;
     File path, current, cartlog;
 
@@ -142,7 +144,7 @@ public class Cart extends AppCompatActivity {
                     String input = quantity.getText().toString();
                     try{
                         int number = Integer.parseInt(input);
-                        if (number > 0) {
+                        if (number > 0 && number <= retrieved.getAmount()) {
                             Button checkout = (Button) findViewById(R.id.checkout);
                             if (cart == null) {
                                 cart = new AmazonCart(retrieved, number);
@@ -178,5 +180,17 @@ public class Cart extends AppCompatActivity {
             quantity.setText("");
             quantity.setFocusable(false);
         }
+    }
+
+    public void displayObject(AmazonProduct product) {
+        Intent intent = new Intent(this, DisplayImageActivity.class);
+        intent.putExtra("Price", product.getPrice());
+        intent.putExtra("Quantity", product.getAmount());
+        intent.putExtra("Rating", product.getRating());
+        intent.putExtra("Manufacturer", product.getManufacturer());
+        intent.putExtra("Imgurl", product.getPicture());
+        intent.putExtra("Url", product.getUrl());
+        intent.putExtra("Name", product.getName());
+        startActivityForResult(intent, RC_PRODUCT_DISPLAY);
     }
 }
