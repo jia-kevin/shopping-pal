@@ -25,8 +25,8 @@ public class SignedRequestsHelper {
     private static final String REQUEST_METHOD = "GET";
 
     private String endpoint = "webservices.amazon.com"; // must be lowercase
-    private String awsAccessKeyId = "";
-    private String awsSecretKey = "";
+    private String awsAccessKeyId = "AKIAIWLYCJ5QMKLQ56BQ";
+    private String awsSecretKey = "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";
 
     private SecretKeySpec secretKeySpec = null;
     private Mac mac = null;
@@ -49,7 +49,7 @@ public class SignedRequestsHelper {
     public String sign(Map<String, String> params) {
         params.put("AWSAccessKeyId", awsAccessKeyId);
         params.put("Timestamp", timestamp());
-        params.put("AssociateTag", "kzzhang-20");
+        params.put("AssociateTag", "kzzhang08-20");
         params.put("Service", "AWSECommerceService");
 
         SortedMap<String, String> sortedParamMap =

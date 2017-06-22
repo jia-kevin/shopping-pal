@@ -1,4 +1,4 @@
-package me.tigerhe.shoppingpal;
+package me.tigerhe.shoppingpal.models;
 
 import android.util.Log;
 

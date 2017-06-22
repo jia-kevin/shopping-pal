@@ -3,6 +3,8 @@ package me.tigerhe.shoppingpal;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -17,11 +19,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import me.tigerhe.shoppingpal.adapters.ListAdapter;
+import me.tigerhe.shoppingpal.models.AmazonCart;
+import me.tigerhe.shoppingpal.models.AmazonProduct;
+
 public class Cart extends AppCompatActivity {
 
     private TextView mCountPrice;
 
     private Button cameraButton;
+
+    private RecyclerView.LayoutManager mLayoutManager;
+    private ListAdapter mAdapter;
     AmazonCart cart = null;
     AmazonProduct currentProduct = null;
 
@@ -32,7 +41,6 @@ public class Cart extends AppCompatActivity {
 
     // list view and adapter for data
     private ListView mList;
-    private ItemListAdapter mAdapter;
     final int RC_BARCODE_CAPTURE = 9001;
     final int RC_PRODUCT_DISPLAY = 9002;
     long barcodeValue;
@@ -79,17 +87,19 @@ public class Cart extends AppCompatActivity {
             }
         });
 
-        mList = (ListView) findViewById(R.id.list);
-        mAdapter = new ItemListAdapter(this, mProductList);
-        mList.setAdapter(mAdapter);
-
         path = getApplicationContext().getFilesDir();
         current = new File(path, "currentproduct.txt");
         cartlog = new File(path, "cartlog.txt");
+
+        RecyclerView list = (RecyclerView)findViewById(R.id.list);
+        mLayoutManager = new LinearLayoutManager(this);
+        list.setLayoutManager(mLayoutManager);
+        mAdapter = new ListAdapter(this, cart.getProducts());
+        list.setAdapter(mAdapter);
     }
 
     public void switchToCamera() {
-        mAdapter.updateList(mProductList);
+       // mAdapter.updateList(mProductList);
         Intent intent = new Intent(this, BarcodeCaptureActivity.class);
         startActivityForResult(intent, RC_BARCODE_CAPTURE);
     }

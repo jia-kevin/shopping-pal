@@ -151,6 +151,7 @@ class ProductSave {
                     public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                         // called when response HTTP status is "4XX" (eg. 401, 403, 404)
                         Log.d("Failure", Integer.toString(statusCode));
+                        Log.d("BAISCFAILURE", responseBody.toString());
                         output = "Failure";
                     }
                     @Override
@@ -219,7 +220,7 @@ class ProductSave {
     }
 
     public void savePrice(String input){
-        Log.d("Price", "third");
+        Log.d("Price", input);
         AsyncHttpClient client = new AsyncHttpClient();
         client.get(input, new AsyncHttpResponseHandler() {
             @Override

@@ -46,11 +46,6 @@
         </activity>
 
 
-        <activity android:name=".Login">
-        </activity>
-
-        <activity android:name=".Camera" />
-
         <!--<activity android:name=".Product" />-->
         <activity android:name=".DisplayProduct"></activity>
     </application>

@@ -1,4 +1,4 @@
-package me.tigerhe.shoppingpal;
+package me.tigerhe.shoppingpal.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,6 +10,9 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import java.util.List;
+
+import me.tigerhe.shoppingpal.R;
+import me.tigerhe.shoppingpal.models.AmazonProduct;
 
 public class ItemListAdapter extends ArrayAdapter<AmazonProduct> {
 

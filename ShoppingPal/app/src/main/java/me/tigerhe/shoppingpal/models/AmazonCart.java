@@ -1,4 +1,4 @@
-package me.tigerhe.shoppingpal;
+package me.tigerhe.shoppingpal.models;
 
 import android.util.Log;
 
@@ -8,7 +8,9 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import org.apache.http.Header;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by kzhan_000 on 2016-12-30.
@@ -152,6 +154,11 @@ public class AmazonCart {
                 Log.d("Retry", "asdf");
             }
         });
+    }
+
+    public List<AmazonProduct> getProducts() {
+        List<AmazonProduct> products = new ArrayList<>();
+        return products;
     }
 
 }
