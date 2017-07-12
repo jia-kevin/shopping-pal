@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
@@ -23,7 +24,7 @@ import me.tigerhe.shoppingpal.adapters.ListAdapter;
 import me.tigerhe.shoppingpal.models.AmazonCart;
 import me.tigerhe.shoppingpal.models.AmazonProduct;
 
-public class Cart extends AppCompatActivity {
+public class CartActivity extends AppCompatActivity {
 
     private TextView mCountPrice;
 
@@ -31,7 +32,8 @@ public class Cart extends AppCompatActivity {
 
     private RecyclerView.LayoutManager mLayoutManager;
     private ListAdapter mAdapter;
-    AmazonCart cart = null;
+    private TextView mEmptyMessage;
+    AmazonCart mCart = null;
     AmazonProduct currentProduct = null;
 
     // list of product names
@@ -52,6 +54,7 @@ public class Cart extends AppCompatActivity {
         setContentView(R.layout.activity_cart);
 
         mCountPrice = (TextView) findViewById(R.id.count_price);
+        mEmptyMessage = (TextView) findViewById(R.id.empty_list_message);
 
         cameraButton = (Button) findViewById(R.id.camera_button);
         cameraButton.setOnClickListener(new View.OnClickListener() {
@@ -61,13 +64,7 @@ public class Cart extends AppCompatActivity {
             }
         });
 
-        final Button addButton = (Button) findViewById(R.id.add_item);
-        addButton.setEnabled(false);
-        final Button checkout = (Button) findViewById(R.id.checkout);
-        checkout.setEnabled(false);
         final TextView quantity = (TextView)findViewById(R.id.quantity);
-        quantity.setText("");
-        quantity.setFocusable(false);
 
         Button resetButton = (Button) findViewById(R.id.reset);
         resetButton.setOnClickListener(new View.OnClickListener() {
@@ -75,15 +72,11 @@ public class Cart extends AppCompatActivity {
             public void onClick(View view) {
                 items = 0;
                 price = 0;
-                cart = null;
+                mCart = new AmazonCart();
+
                 TextView count = (TextView)findViewById(R.id.count_price);
                 count.setText("$0.00 : 0 items");
-                addButton.setEnabled(false);
-                checkout.setEnabled(false);
-                quantity.setText("");
-                quantity.setFocusable(false);
-                TextView output = (TextView)findViewById(R.id.data_output);
-                output.setText("");
+                mEmptyMessage.setVisibility(View.VISIBLE);
             }
         });
 
@@ -94,7 +87,8 @@ public class Cart extends AppCompatActivity {
         RecyclerView list = (RecyclerView)findViewById(R.id.list);
         mLayoutManager = new LinearLayoutManager(this);
         list.setLayoutManager(mLayoutManager);
-        mAdapter = new ListAdapter(this, cart.getProducts());
+        resetButton.callOnClick();
+        mAdapter = new ListAdapter(this, mCart.getProducts());
         list.setAdapter(mAdapter);
     }
 
@@ -131,7 +125,7 @@ public class Cart extends AppCompatActivity {
 //                        Log.d("Checkout URL", sample.checkout);
 //                    }
 
-                    TextView output = (TextView)findViewById(R.id.data_output);
+//                    TextView output = (TextView)findViewById(R.id.data_output);
                     if (retrieved.isValid()){
                         displayObject(retrieved);
 //                        output.setText(retrieved.display());
@@ -149,11 +143,11 @@ public class Cart extends AppCompatActivity {
 //                                    int number = Integer.parseInt(input);
 //                                    if (number > 0 && number <= retrieved.getAmount()) {
 //                                        Button checkout = (Button) findViewById(R.id.checkout);
-//                                        if (cart == null) {
-//                                            cart = new AmazonCart(retrieved, number);
+//                                        if (mCart == null) {
+//                                            mCart = new AmazonCart(retrieved, number);
 //                                            checkout.setEnabled(true);
 //                                        } else {
-//                                            cart.add(retrieved, number);
+//                                            mCart.add(retrieved, number);
 //                                        }
 //                                        items += number;
 //                                        price += number*retrieved.getPrice();
@@ -163,7 +157,7 @@ public class Cart extends AppCompatActivity {
 //                                        checkout.setOnClickListener(new View.OnClickListener() {
 //                                            @Override
 //                                            public void onClick(View view) {
-//                                                Uri uriUrl = Uri.parse(cart.checkout);
+//                                                Uri uriUrl = Uri.parse(mCart.checkout);
 //                                                Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
 //                                                startActivity(launchBrowser);
 //                                            }
@@ -176,12 +170,13 @@ public class Cart extends AppCompatActivity {
 //                        });
                     }
                     else{
-                        output.setText("Error - Could not find the associated product on Amazon.");
-                        Button addButton = (Button) findViewById(R.id.add_item);
-                        addButton.setEnabled(false);
-                        TextView quantity = (TextView)findViewById(R.id.quantity);
-                        quantity.setText("");
-                        quantity.setFocusable(false);
+                        Toast.makeText(this, "Error - Could not find the associated product on Amazon", Toast.LENGTH_SHORT).show();
+//                        output.setText("Error - Could not find the associated product on Amazon.");
+//                        Button addButton = (Button) findViewById(R.id.add_item);
+//                        addButton.setEnabled(false);
+//                        TextView quantity = (TextView)findViewById(R.id.quantity);
+//                        quantity.setText("");
+//                        quantity.setFocusable(false);
                     }
                 }
             }
@@ -189,7 +184,9 @@ public class Cart extends AppCompatActivity {
         else if (requestCode == RC_PRODUCT_DISPLAY){
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 if (data != null) {
-
+                    if (mCart.getProducts().size() > 0) {
+                        mEmptyMessage.setVisibility(View.GONE);
+                    }
                 }
             }
         }

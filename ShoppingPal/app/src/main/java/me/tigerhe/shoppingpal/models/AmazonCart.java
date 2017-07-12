@@ -18,10 +18,20 @@ import java.util.List;
 
 public class AmazonCart {
     String checkout, cartID, HMAC;
+    List<AmazonProduct> products;
     boolean status = true;
+
+    public AmazonCart() {
+        products = new ArrayList<>();
+        checkout = null;
+        cartID = null;
+        HMAC = null;
+    }
 
     public AmazonCart(AmazonProduct input, Integer quantity){
         final AmazonProduct product = input;
+        products = new ArrayList<>();
+        products.add(input);
         final Integer number = quantity;
         Thread thread = new Thread(){
             public void run(){
@@ -64,7 +74,7 @@ public class AmazonCart {
                 // called when response HTTP status is "200 OK"
                 Log.d("Success", "create");
                 String searchResult = new String(response);
-                Log.d("Create Cart", searchResult);
+                Log.d("Create CartActivity", searchResult);
                 int index1, index2;
                 index1 = searchResult.indexOf("<PurchaseURL>")+13;
                 index2 = searchResult.indexOf("</PurchaseURL>");
@@ -93,24 +103,28 @@ public class AmazonCart {
     public void add(AmazonProduct input, Integer quantity){
         final AmazonProduct product = input;
         final Integer number = quantity;
-        Thread thread = new Thread(){
-            public void run(){
-                try{
-                    addProduct(product, number);
-                    while(status == true) {
-                        Thread.sleep(200);
+        if (products.size() == 0) {
+            createCart(input, quantity);
+        } else {
+            Thread thread = new Thread() {
+                public void run() {
+                    try {
+                        addProduct(product, number);
+                        while (status == true) {
+                            Thread.sleep(200);
+                        }
+                    } catch (InterruptedException e) {
+                        Log.d("Interrupted", e.toString());
                     }
-                }catch (InterruptedException e){
-                    Log.d("Interrupted", e.toString());
                 }
+            };
+            thread.start();
+            try {
+                thread.join();
+                status = true;
+            } catch (InterruptedException e) {
+                Log.d("Interrupted", e.toString());
             }
-        };
-        thread.start();
-        try{
-            thread.join();
-            status = true;
-        }catch (InterruptedException e){
-            Log.d("Interrupted", e.toString());
         }
     }
 
@@ -129,6 +143,7 @@ public class AmazonCart {
             @Override
             public void onStart() {
                 Log.d("Starting", "add");
+                status = false;
                 //Log.d("[HTTP REQUEST]", query);
             }
             @Override
@@ -141,7 +156,6 @@ public class AmazonCart {
                 index1 = searchResult.indexOf("<PurchaseURL>")+13;
                 index2 = searchResult.indexOf("</PurchaseURL>");
                 checkout = searchResult.substring(index1, index2);
-                status = false;
             }
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
@@ -157,7 +171,9 @@ public class AmazonCart {
     }
 
     public List<AmazonProduct> getProducts() {
-        List<AmazonProduct> products = new ArrayList<>();
+        if (products == null) {
+            products = new ArrayList<>();
+        }
         return products;
     }
 

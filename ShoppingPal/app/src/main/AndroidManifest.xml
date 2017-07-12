@@ -36,7 +36,7 @@
             android:label="Display product">
         </activity>
 
-        <activity android:name=".Cart"
+        <activity android:name=".CartActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden">
             <intent-filter>

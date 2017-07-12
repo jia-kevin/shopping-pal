@@ -24,7 +24,7 @@ public class DisplayProduct extends AppCompatActivity {
         setContentView(R.layout.activity_display_product);
 
 
-        addButton = (Button) findViewById(R.id.add_item);
+//        addButton = (Button) findViewById(R.id.add_item);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -34,7 +34,7 @@ public class DisplayProduct extends AppCompatActivity {
     }
 
     public void goCartEmpty() {
-        Intent intent = new Intent(this, Cart.class);
+        Intent intent = new Intent(this, CartActivity.class);
         startActivity(intent);
     }
 
