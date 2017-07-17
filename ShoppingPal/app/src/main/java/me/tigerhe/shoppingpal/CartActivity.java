@@ -1,12 +1,19 @@
 package me.tigerhe.shoppingpal;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -16,9 +23,8 @@ import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.text.DecimalFormat;
 import java.util.HashMap;
-import java.util.List;
 
 import me.tigerhe.shoppingpal.adapters.ListAdapter;
 import me.tigerhe.shoppingpal.models.AmazonCart;
@@ -26,74 +32,147 @@ import me.tigerhe.shoppingpal.models.AmazonProduct;
 
 public class CartActivity extends AppCompatActivity {
 
-    private TextView mCountPrice;
-
     private Button cameraButton;
+    private Button mCheckoutButton;
+    private Context mContext;
 
     private RecyclerView.LayoutManager mLayoutManager;
     private ListAdapter mAdapter;
     private TextView mEmptyMessage;
-    AmazonCart mCart = null;
-    AmazonProduct currentProduct = null;
-
-    // list of product names
-    private List<AmazonProduct> mProductList = new ArrayList<>();
-    int items = 0;
-    double price = 0;
+    private AmazonCart mCart = CartManagerSingleton.getInstance();
+    private AmazonProduct mCurrentProduct;
 
     // list view and adapter for data
     private ListView mList;
     final int RC_BARCODE_CAPTURE = 9001;
     final int RC_PRODUCT_DISPLAY = 9002;
     long barcodeValue;
-    File path, current, cartlog;
+    File path, current;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
 
-        mCountPrice = (TextView) findViewById(R.id.count_price);
         mEmptyMessage = (TextView) findViewById(R.id.empty_list_message);
+        mContext = this;
+
+        reset();
 
         cameraButton = (Button) findViewById(R.id.camera_button);
-        cameraButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                switchToCamera();
-            }
-        });
-
-        final TextView quantity = (TextView)findViewById(R.id.quantity);
-
-        Button resetButton = (Button) findViewById(R.id.reset);
-        resetButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                items = 0;
-                price = 0;
-                mCart = new AmazonCart();
-
-                TextView count = (TextView)findViewById(R.id.count_price);
-                count.setText("$0.00 : 0 items");
-                mEmptyMessage.setVisibility(View.VISIBLE);
-            }
-        });
 
         path = getApplicationContext().getFilesDir();
         current = new File(path, "currentproduct.txt");
-        cartlog = new File(path, "cartlog.txt");
 
         RecyclerView list = (RecyclerView)findViewById(R.id.list);
         mLayoutManager = new LinearLayoutManager(this);
         list.setLayoutManager(mLayoutManager);
-        resetButton.callOnClick();
         mAdapter = new ListAdapter(this, mCart.getProducts());
         list.setAdapter(mAdapter);
+
+        mCheckoutButton = (Button) findViewById(R.id.checkout_button);
+        mCheckoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String checkout = mCart.getCheckout();
+                if (checkout != null && checkout != "") {
+                    Uri uri = Uri.parse(checkout);
+                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(mContext, "Invalid cart", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            // hide keyboard if visible
+            InputMethodManager inputManager = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), 0);
+
+            if (!cameraButton.hasOnClickListeners()) {
+                final Rect cameraButtonBounds = new Rect(cameraButton.getLeft(), cameraButton.getTop(),
+                        cameraButton.getRight(), cameraButton.getBottom());
+                // never called
+                cameraButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // do nothing
+                    }
+                });
+                cameraButton.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View view, MotionEvent motionEvent) {
+                        switch (MotionEventCompat.getActionMasked(motionEvent)) {
+                            case (MotionEvent.ACTION_DOWN):
+                                view.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorSecondaryDark));
+                                return true;
+                            case (MotionEvent.ACTION_UP):
+                                view.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorSecondary));
+                                int x = view.getLeft() + (int) motionEvent.getX();
+                                int y = view.getTop() + (int) motionEvent.getY();
+                                Log.d("BUTTON", String.valueOf(cameraButtonBounds.left)
+                                        + " : " + String.valueOf(cameraButtonBounds.top)
+                                        + " : " + String.valueOf(cameraButtonBounds.right)
+                                        + " : " + String.valueOf(cameraButtonBounds.bottom));
+                                Log.d("X - Y", String.valueOf(x) + " : " + String.valueOf(y));
+                                if (cameraButtonBounds.contains(x, y)) {
+                                    switchToCamera();
+                                }
+                                return true;
+                            default:
+                                return true;
+                        }
+                    }
+                });
+
+                Button resetButton = (Button) findViewById(R.id.reset);
+                final Rect resetButtonBounds = new Rect(resetButton.getLeft(), resetButton.getTop(),
+                        resetButton.getRight(), resetButton.getBottom());
+
+                resetButton.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View view, MotionEvent motionEvent) {
+                        switch (MotionEventCompat.getActionMasked(motionEvent)) {
+                            case (MotionEvent.ACTION_DOWN):
+                                view.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorSecondaryDark));
+                                return true;
+                            case (MotionEvent.ACTION_UP):
+                                view.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorSecondary));
+                                if (resetButtonBounds.contains(view.getLeft() + (int) motionEvent.getX(),
+                                        view.getTop() + (int) motionEvent.getY())) {
+                                    reset();
+                                }
+                                return true;
+                            default:
+                                return true;
+                        }
+                    }
+                });
+            }
+        }
+    }
+
+    public void reset() {
+        CartManagerSingleton.getInstance().reset();
+        mCart = CartManagerSingleton.getInstance();
+        updatePrice(0f, 0);
+
+        TextView count = (TextView)findViewById(R.id.count_price);
+        count.setText("$0.00 : 0 items");
+        mEmptyMessage.setVisibility(View.VISIBLE);
+
+        if (mAdapter != null) {
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     public void switchToCamera() {
-       // mAdapter.updateList(mProductList);
         Intent intent = new Intent(this, BarcodeCaptureActivity.class);
         startActivityForResult(intent, RC_BARCODE_CAPTURE);
     }
@@ -117,7 +196,7 @@ public class CartActivity extends AppCompatActivity {
 
                     //prints data to work with
                     Log.d("Product Data", productData);
-                    final AmazonProduct retrieved = new AmazonProduct(productData);
+                    mCurrentProduct = new AmazonProduct(productData);
 //                    if (retrieved.isValid()) retrieved.print();
 //                    else Log.d("Retrieved", "Invalid!");
 //                    if (retrieved.isValid()){
@@ -126,8 +205,8 @@ public class CartActivity extends AppCompatActivity {
 //                    }
 
 //                    TextView output = (TextView)findViewById(R.id.data_output);
-                    if (retrieved.isValid()){
-                        displayObject(retrieved);
+                    if (mCurrentProduct.isValid()){
+                        displayObject(mCurrentProduct);
 //                        output.setText(retrieved.display());
 //                        Button addButton = (Button) findViewById(R.id.add_item);
 //                        addButton.setEnabled(true);
@@ -171,21 +250,25 @@ public class CartActivity extends AppCompatActivity {
                     }
                     else{
                         Toast.makeText(this, "Error - Could not find the associated product on Amazon", Toast.LENGTH_SHORT).show();
-//                        output.setText("Error - Could not find the associated product on Amazon.");
-//                        Button addButton = (Button) findViewById(R.id.add_item);
-//                        addButton.setEnabled(false);
-//                        TextView quantity = (TextView)findViewById(R.id.quantity);
-//                        quantity.setText("");
-//                        quantity.setFocusable(false);
                     }
                 }
             }
         }
         else if (requestCode == RC_PRODUCT_DISPLAY){
+            onWindowFocusChanged(true);
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 if (data != null) {
-                    if (mCart.getProducts().size() > 0) {
-                        mEmptyMessage.setVisibility(View.GONE);
+                    try {
+                        Integer quantity = data.getIntExtra("Quantity", 0);
+                        mCart.add(mCurrentProduct, quantity);
+                        float price = mAdapter.updateData();
+                        int items = mAdapter.getNumItems();
+                        updatePrice(price, items);
+                        if (mCart.getProducts().size() > 0) {
+                            mEmptyMessage.setVisibility(View.GONE);
+                        }
+                    } catch (Exception e) {
+
                     }
                 }
             }
@@ -202,5 +285,11 @@ public class CartActivity extends AppCompatActivity {
         intent.putExtra("Url", product.getUrl());
         intent.putExtra("Name", product.getName());
         startActivityForResult(intent, RC_PRODUCT_DISPLAY);
+    }
+
+    public void updatePrice(Float total, int items) {
+        String outputPrice = new DecimalFormat("#.##").format(total);
+        TextView count = (TextView)findViewById(R.id.count_price);
+        count.setText("$" + outputPrice + " : "+Integer.toString(items)+" items");
     }
 }

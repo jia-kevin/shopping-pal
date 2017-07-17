@@ -1,14 +1,20 @@
 package me.tigerhe.shoppingpal;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.common.api.CommonStatusCodes;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -17,12 +23,42 @@ import com.squareup.picasso.Picasso;
 
 public final class DisplayImageActivity extends AppCompatActivity{
 
+    private Context mContext = this;
+
     @Override
     protected void onCreate(Bundle bundle){
         super.onCreate(bundle);
         setContentView(R.layout.activity_display_product);
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         ImageView picture = (ImageView)findViewById(R.id.imgbox);
+        Button backButton = (Button) findViewById(R.id.backToTitle);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+        Button addButton = (Button) findViewById(R.id.add_product);
+        final EditText editText = (EditText) findViewById(R.id.numOrder);
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String input = String.valueOf(editText.getText());
+                if (input == null || input.equals("")) {
+                    Toast.makeText(mContext, "Enter a quantity!", Toast.LENGTH_SHORT).show();
+                } else {
+                    int quantity = Integer.parseInt(input);
+                    if (quantity > Integer.parseInt(intent.getStringExtra("Quantity"))) {
+                        Toast.makeText(mContext, "Quantity unavailable!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Intent data = new Intent();
+                        data.putExtra("Quantity", quantity);
+                        setResult(CommonStatusCodes.SUCCESS, data);
+                        finish();
+                    }
+                }
+            }
+        });
         Picasso.with(this)
                 .load(intent.getStringExtra("Imgurl"))
                 .placeholder(R.drawable.logo_square)

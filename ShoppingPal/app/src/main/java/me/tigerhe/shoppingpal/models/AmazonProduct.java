@@ -20,6 +20,7 @@ public class AmazonProduct {
     public static String category;
     public static String manufacturer;
     public static String url;
+    public Integer quantity; //amount to purchase
 
     public AmazonProduct(){
     }

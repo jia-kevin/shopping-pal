@@ -19,10 +19,15 @@
         android:background="@color/colorPrimaryLight">
 
         <TextView
-            android:id="@+id/titleView"
+            android:id="@+id/titleText"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="left|center_vertical"/>
+            android:layout_height="match_parent"
+            android:paddingLeft="5dp"
+            android:textSize="32sp"
+            android:typeface="serif"
+            android:gravity="left|center_vertical"
+            android:textColor="@color/colorText"
+            android:text="@string/cart_title"/>
 
         <Button
             android:id="@+id/reset"
@@ -31,39 +36,28 @@
             android:layout_gravity="center_vertical"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
-            android:backgroundTint="#759aff"
+            android:paddingLeft="6dp"
+            android:paddingRight="6dp"
+            android:background="@color/colorSecondary"
+            android:textColor="@color/colorText"
             android:text="Reset Cart"
-            android:layout_marginLeft="85dp"
+            android:layout_marginLeft="88dp"
             android:layout_alignBottom="@+id/count_price" />
 
         <TextView
             android:id="@+id/count_price"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:paddingRight="5dp"
+            android:layout_height="match_parent"
             android:layout_gravity="right"
+            android:gravity="right|center_vertical"
             android:background="@color/colorPrimaryLight"
-            android:gravity="end"
+            android:layout_marginRight="7dp"
             android:text="$0.00 : 0 items"
             android:textColor="@color/colorText"
             android:textSize="18sp"
             android:typeface="serif" />
 
     </FrameLayout>
-
-    <TextView
-        android:id="@+id/titleText"
-        android:layout_width="wrap_content"
-        android:layout_height="42dp"
-        android:paddingLeft="5dp"
-        android:textSize="32sp"
-        android:typeface="serif"
-        android:gravity="start"
-        android:textColor="@color/colorText"
-        android:text="@string/cart_title"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
 
     <Button
         android:id="@+id/camera_button"
@@ -74,7 +68,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentStart="true"
-        android:background="@color/colorSecondaryDark"
+        android:background="@color/colorSecondary"
         android:drawableTop="@drawable/camera"
         android:paddingTop="16dp" />
 
@@ -91,12 +85,14 @@
             android:id="@+id/list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="61dp"/>
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/empty_list_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="61dp"
             android:layout_gravity="center"
             android:gravity="center"
             android:textColor="@color/colorText"
@@ -104,6 +100,15 @@
             android:padding="30dp"
             android:visibility="gone"
             android:text="Press the camera button to start scanning for items to add to your cart!"/>
+
+        <Button
+            android:id="@+id/checkout_button"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:text="Checkout"/>
 
     </FrameLayout>
 

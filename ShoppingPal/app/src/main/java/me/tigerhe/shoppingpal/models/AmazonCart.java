@@ -17,8 +17,8 @@ import java.util.List;
  */
 
 public class AmazonCart {
-    String checkout, cartID, HMAC;
-    List<AmazonProduct> products;
+    private String checkout, cartID, HMAC;
+    private List<AmazonProduct> products;
     boolean status = true;
 
     public AmazonCart() {
@@ -26,6 +26,7 @@ public class AmazonCart {
         checkout = null;
         cartID = null;
         HMAC = null;
+        status = true;
     }
 
     public AmazonCart(AmazonProduct input, Integer quantity){
@@ -54,7 +55,7 @@ public class AmazonCart {
         }
     }
 
-    protected void createCart(AmazonProduct input, Integer quantity){
+    protected void createCart(final AmazonProduct input, final Integer quantity){
         HashMap<String, String> map = new HashMap<String, String>();
         map.put("Operation", "CartCreate");
         map.put("Item.1.ASIN", input.ASIN);
@@ -64,11 +65,6 @@ public class AmazonCart {
         final String query = url.sign(map);
         AsyncHttpClient client = new AsyncHttpClient();
         client.get(query, new AsyncHttpResponseHandler(){
-            @Override
-            public void onStart() {
-                Log.d("Starting", "create");
-                //Log.d("[HTTP REQUEST]", query);
-            }
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
                 // called when response HTTP status is "200 OK"
@@ -103,13 +99,15 @@ public class AmazonCart {
     public void add(AmazonProduct input, Integer quantity){
         final AmazonProduct product = input;
         final Integer number = quantity;
-        if (products.size() == 0) {
-            createCart(input, quantity);
-        } else {
+        if (quantity > 0) {
             Thread thread = new Thread() {
                 public void run() {
                     try {
-                        addProduct(product, number);
+                        if (products.size() == 0) {
+                            createCart(product, number);
+                        } else {
+                            addProduct(product, number);
+                        }
                         while (status == true) {
                             Thread.sleep(200);
                         }
@@ -122,52 +120,60 @@ public class AmazonCart {
             try {
                 thread.join();
                 status = true;
-            } catch (InterruptedException e) {
-                Log.d("Interrupted", e.toString());
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+            checkout = checkout.replace("&amp;", "%26");
+            input.quantity = quantity;
+            products.add(input);
         }
     }
 
     protected void addProduct(AmazonProduct input, Integer quantity) {
-        HashMap<String, String> map = new HashMap<String, String>();
-        map.put("CartId", cartID);
-        map.put("HMAC", HMAC);
-        map.put("Operation", "CartAdd");
-        map.put("Item.1.ASIN", input.ASIN);
-        map.put("Item.1.Quantity", quantity.toString());
+        if (quantity > 0) {
+            HashMap<String, String> map = new HashMap<String, String>();
+            map.put("CartId", cartID);
+            map.put("HMAC", HMAC);
+            map.put("Operation", "CartAdd");
+            map.put("Item.1.ASIN", input.ASIN);
+            map.put("Item.1.Quantity", quantity.toString());
 
-        SignedRequestsHelper url = new SignedRequestsHelper();
-        final String query = url.sign(map);
-        AsyncHttpClient client = new AsyncHttpClient();
-        client.get(query, new AsyncHttpResponseHandler(){
-            @Override
-            public void onStart() {
-                Log.d("Starting", "add");
-                status = false;
-                //Log.d("[HTTP REQUEST]", query);
-            }
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
-                // called when response HTTP status is "200 OK"
-                Log.d("Success", "add");
-                String searchResult = new String(response);
-                Log.d("add", searchResult);
-                int index1, index2;
-                index1 = searchResult.indexOf("<PurchaseURL>")+13;
-                index2 = searchResult.indexOf("</PurchaseURL>");
-                checkout = searchResult.substring(index1, index2);
-            }
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                // called when response HTTP status is "4XX" (eg. 401, 403, 404)
-                Log.d("Failure", Integer.toString(statusCode));
-            }
-            @Override
-            public void onRetry() {
-                // called when request is retried
-                Log.d("Retry", "asdf");
-            }
-        });
+            SignedRequestsHelper url = new SignedRequestsHelper();
+            final String query = url.sign(map);
+            AsyncHttpClient client = new AsyncHttpClient();
+            client.get(query, new AsyncHttpResponseHandler() {
+                @Override
+                public void onStart() {
+                    Log.d("Starting", "add");
+                    status = false;
+                    //Log.d("[HTTP REQUEST]", query);
+                }
+
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+                    // called when response HTTP status is "200 OK"
+                    Log.d("Success", "add");
+                    String searchResult = new String(response);
+                    Log.d("add", searchResult);
+                    int index1, index2;
+                    index1 = searchResult.indexOf("<PurchaseURL>") + 13;
+                    index2 = searchResult.indexOf("</PurchaseURL>");
+                    checkout = searchResult.substring(index1, index2);
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                    // called when response HTTP status is "4XX" (eg. 401, 403, 404)
+                    Log.d("Failure", Integer.toString(statusCode));
+                }
+
+                @Override
+                public void onRetry() {
+                    // called when request is retried
+                    Log.d("Retry", "asdf");
+                }
+            });
+        }
     }
 
     public List<AmazonProduct> getProducts() {
@@ -177,4 +183,28 @@ public class AmazonCart {
         return products;
     }
 
+    public void reset() {
+        if (products == null) {
+            products = new ArrayList<>();
+        } else {
+            products.clear();
+        }
+        checkout = null;
+        cartID = null;
+        HMAC = null;
+        status = true;
+    }
+
+
+    public String getCheckout() {
+        return checkout;
+    }
+
+    public String getCartID() {
+        return cartID;
+    }
+
+    public String getHMAC() {
+        return HMAC;
+    }
 }

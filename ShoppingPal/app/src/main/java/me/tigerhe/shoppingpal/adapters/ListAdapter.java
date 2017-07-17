@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.Iterator;
 import java.util.List;
 
 import me.tigerhe.shoppingpal.R;
@@ -36,7 +37,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.listViewHolder
     @Override
     public listViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(mContext);
-        View view = layoutInflater.inflate(R.layout.list_card, parent);
+        View view = layoutInflater.inflate(R.layout.list_card, parent, false);
         listViewHolder viewHolder = new listViewHolder(view);
         return viewHolder;
     }
@@ -48,12 +49,33 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.listViewHolder
         TextView quantity = (TextView) holder.mView.findViewById(R.id.quantity_purchased);
         AmazonProduct product = mProducts.get(position);
         name.setText(product.getName());
-        price.setText(String.valueOf(product.getAmount()*product.getPrice()));
-        quantity.setText(String.valueOf(product.getAmount()));
+        price.setText(String.valueOf(product.quantity*product.getPrice()));
+        quantity.setText(String.valueOf(product.quantity));
     }
 
     @Override
     public int getItemCount() {
         return mProducts.size();
+    }
+
+    public Float updateData() {
+        notifyDataSetChanged();
+        float total = 0;
+        Iterator iterator = mProducts.listIterator();
+        while (iterator.hasNext()) {
+            AmazonProduct product = (AmazonProduct)iterator.next();
+            total += product.getPrice() * product.quantity;
+        }
+        return total;
+    }
+
+    public int getNumItems() {
+        int total = 0;
+        Iterator iterator = mProducts.listIterator();
+        while (iterator.hasNext()) {
+            AmazonProduct product = (AmazonProduct)iterator.next();
+            total += product.quantity;
+        }
+        return total;
     }
 }

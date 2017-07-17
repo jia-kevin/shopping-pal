@@ -101,7 +101,7 @@ class ProductSave {
                 String name, rating, ASIN, category, manufacturer, producturl;
                 Log.d("Success", "first");
                 String searchResult = new String(response);
-                Log.d("okinput", searchResult);
+                Log.d("basicSave", searchResult);
                 
                 index1 = searchResult.indexOf("<Title>")+7;
                 index2 = searchResult.indexOf("</Title>");
@@ -220,7 +220,6 @@ class ProductSave {
     }
 
     public void savePrice(String input){
-        Log.d("Price", input);
         AsyncHttpClient client = new AsyncHttpClient();
         client.get(input, new AsyncHttpResponseHandler() {
             @Override
@@ -233,9 +232,8 @@ class ProductSave {
                 // called when response HTTP status is "200 OK"
                 int index1, index2;
                 String price, amount;
-                Log.d("Success", "third");
                 String searchResult = new String(response);
-                Log.d("faultyinput", searchResult);
+                Log.d("priceSave", searchResult);
                 index1 = searchResult.indexOf("<TotalNew>")+10;
                 index2 = searchResult.indexOf("</TotalNew>");
                 amount = searchResult.substring(index1, index2);
@@ -278,7 +276,6 @@ class ProductSave {
     }
 
     public void saveImage(String input){
-        Log.d("Image", "fourth");
         AsyncHttpClient client = new AsyncHttpClient();
         client.get(input, new AsyncHttpResponseHandler() {
             @Override
@@ -293,7 +290,7 @@ class ProductSave {
                 String imgurl;
                 Log.d("Success", "fourth");
                 String searchResult = new String(response);
-                //Log.d("IMGOUTPUT", searchResult);
+                Log.d("imgSave", searchResult);
                 index1 = searchResult.indexOf("<LargeImage><URL>")+17;
                 String temp = searchResult.substring(index1);
                 index2 = temp.indexOf("</URL>");
