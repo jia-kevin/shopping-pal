@@ -39,6 +39,12 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.listViewHolder
         LayoutInflater layoutInflater = LayoutInflater.from(mContext);
         View view = layoutInflater.inflate(R.layout.list_card, parent, false);
         listViewHolder viewHolder = new listViewHolder(view);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // create dialog
+            }
+        });
         return viewHolder;
     }
 

@@ -2,7 +2,7 @@ package me.tigerhe.shoppingpal.models;
 
 import android.util.Log;
 
-import com.amazon.advertising.api.sample.SignedRequestsHelper;
+import me.tigerhe.shoppingpal.singletons.SignedRequestsHelper;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
@@ -61,7 +61,7 @@ public class AmazonCart {
         map.put("Item.1.ASIN", input.ASIN);
         map.put("Item.1.Quantity", quantity.toString());
 
-        SignedRequestsHelper url = new SignedRequestsHelper();
+        SignedRequestsHelper url = SignedRequestsHelper.getInstance();
         final String query = url.sign(map);
         AsyncHttpClient client = new AsyncHttpClient();
         client.get(query, new AsyncHttpResponseHandler(){
@@ -138,7 +138,7 @@ public class AmazonCart {
             map.put("Item.1.ASIN", input.ASIN);
             map.put("Item.1.Quantity", quantity.toString());
 
-            SignedRequestsHelper url = new SignedRequestsHelper();
+            SignedRequestsHelper url = SignedRequestsHelper.getInstance();
             final String query = url.sign(map);
             AsyncHttpClient client = new AsyncHttpClient();
             client.get(query, new AsyncHttpResponseHandler() {

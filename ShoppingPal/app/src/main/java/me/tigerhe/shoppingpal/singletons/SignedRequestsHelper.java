@@ -1,7 +1,11 @@
-package com.amazon.advertising.api.sample;
+package me.tigerhe.shoppingpal.singletons;
 
 import android.util.Base64;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.InvalidKeyException;
@@ -14,36 +18,48 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TimeZone;
 import java.util.TreeMap;
+import java.util.concurrent.TimeUnit;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+
+
+/**
+ * Singleton class for making signed requests to Amazon web advertising api
+ */
+
 public class SignedRequestsHelper {
+    private static int TIMEOUT = 60000;
+    private static SignedRequestsHelper instance;
+
     private static final String UTF8_CHARSET = "UTF-8";
     private static final String HMAC_SHA256_ALGORITHM = "HmacSHA256";
     private static final String REQUEST_URI = "/onca/xml";
     private static final String REQUEST_METHOD = "GET";
 
     private String endpoint = "webservices.amazon.com"; // must be lowercase
-    private String awsAccessKeyId = "AKIAJRTSIFQ7OI3ATSDQ";
-    private String awsSecretKey = "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";
+    private String awsAccessKeyId;
+    private String awsSecretKey;
 
     private SecretKeySpec secretKeySpec = null;
     private Mac mac = null;
 
-    public SignedRequestsHelper() {
-        byte[] secretyKeyBytes = awsSecretKey.getBytes();
-        secretKeySpec = new SecretKeySpec(secretyKeyBytes, HMAC_SHA256_ALGORITHM);
-        try {
-            mac = Mac.getInstance(HMAC_SHA256_ALGORITHM);
+    public static SignedRequestsHelper getInstance() {
+        if (instance == null) {
+            synchronized (SignedRequestsHelper.class) {
+                if (instance == null) {
+                    instance = new SignedRequestsHelper();
+                }
+            }
         }
-        catch (NoSuchAlgorithmException e) {
-        }
-        try {
-            mac.init(secretKeySpec);
-        }
-        catch (InvalidKeyException e) {
-        }
+        return instance;
+    }
+
+    private SignedRequestsHelper() {
+        initCredentials();
     }
 
     public String sign(Map<String, String> params) {
@@ -126,6 +142,40 @@ public class SignedRequestsHelper {
             out = s;
         }
         return out;
+    }
+
+    private void initCredentials() {
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(TIMEOUT, TimeUnit.MILLISECONDS)
+                .readTimeout(TIMEOUT, TimeUnit.MILLISECONDS)
+                .build();
+        Request request = new Request.Builder()
+                .get()
+                .url("https://shopping-pal-server.herokuapp.com/credentials")
+                .build();
+
+        try {
+            JSONObject result = new JSONObject(client.newCall(request).execute().body().string());
+            awsAccessKeyId = result.getString("awsAccessKeyId");
+            awsSecretKey = result.getString("awsSecretKey");
+        } catch (JSONException e1) {
+            e1.printStackTrace();
+        } catch (IOException e2) {
+            e2.printStackTrace();
+        }
+
+        byte[] secretyKeyBytes = awsSecretKey.getBytes();
+        secretKeySpec = new SecretKeySpec(secretyKeyBytes, HMAC_SHA256_ALGORITHM);
+        try {
+            mac = Mac.getInstance(HMAC_SHA256_ALGORITHM);
+        }
+        catch (NoSuchAlgorithmException e) {
+        }
+        try {
+            mac.init(secretKeySpec);
+        }
+        catch (InvalidKeyException e) {
+        }
     }
 
 }

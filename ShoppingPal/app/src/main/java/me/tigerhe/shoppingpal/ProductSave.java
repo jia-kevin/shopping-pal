@@ -2,7 +2,7 @@ package me.tigerhe.shoppingpal;
 
 import android.util.Log;
 
-import com.amazon.advertising.api.sample.SignedRequestsHelper;
+import me.tigerhe.shoppingpal.singletons.SignedRequestsHelper;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
@@ -74,7 +74,7 @@ class ProductSave {
         }
 
         //sign request
-        SignedRequestsHelper url = new SignedRequestsHelper();
+        SignedRequestsHelper url = SignedRequestsHelper.getInstance();
         final String input = url.sign(map);
         AsyncHttpClient client = new AsyncHttpClient();
         //get basic details

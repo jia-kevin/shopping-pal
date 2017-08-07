@@ -248,7 +248,7 @@ public class CartActivity extends AppCompatActivity {
 //                            }
 //                        });
                     }
-                    else{
+                    else {
                         Toast.makeText(this, "Error - Could not find the associated product on Amazon", Toast.LENGTH_SHORT).show();
                     }
                 }
